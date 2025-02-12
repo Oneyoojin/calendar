@@ -4,23 +4,16 @@
   <meta charset="UTF-8">
   <title>SIGN IN</title>
   
-  <!-- CSS 파일 링크 (Thymeleaf 방식) -->
   <link rel="stylesheet" th:href="@{/css/style.css}" />
-  
-  <!-- JavaScript 파일 링크 (Thymeleaf 방식) -->
   <script th:src="@{/js/script.js}" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- FontAwesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
 
   <div class="container">
-    <!-- Heading -->
     <h1>SIGN IN</h1>
     
-    <!-- Links -->
     <ul class="links">
       <li>
         <a href="#" id="signin">SIGN IN</a>
@@ -32,47 +25,39 @@
         <a href="#" id="reset">RESET</a>
       </li>
     </ul>
-    
-    <!-- 로그아웃 후 알림 메시지 -->
+
     <div th:if="${param.logout}">
       <p style="color: green; font-weight: bold;">로그아웃 되었습니다.</p>
     </div>
     
-    <!-- Form -->
-    <form action="/api/sample/login" method="post">
-      <!-- email input -->
-      <div class="first-input input__block first-input__block">
+    <!-- 로그인 폼 -->
+    <form action="/login" method="post">
+      <div class="first-input input__block">
          <input type="text" placeholder="Username" class="input" id="username" name="username" required />
       </div>
-      <!-- password input -->
       <div class="input__block">
          <input type="password" placeholder="Password" class="input" id="password" name="password" required />
       </div>
-      <!-- repeat password input (Optional, if needed for sign up) -->
       <div class="input__block">
          <input type="password" placeholder="Repeat Password" class="input repeat__password" id="repeat__password" />
       </div>
-      <!-- sign in button -->
-      <button class="signin__btn">
-        Sign in
-      </button>
+      <button class="signin__btn">Sign in</button>
 
-      <!-- 로그인 오류 메시지 표시 -->
       <div th:if="${error}" class="error-message">
         <p th:text="${error}" style="color: red; font-weight: bold;"></p>
       </div>
     </form>
     
-    <!-- separator -->
     <div class="separator">
       <p>OR</p>
     </div>
-    
-    <!-- google button -->
-    <button class="google__btn">
-      <i class="fa fa-google"></i>
+
+    <!-- 구글 로그인 버튼 -->
+    <a href="/oauth2/authorization/google" class="google__btn" style="display: inline-block; text-decoration: none; background-color: #4285F4; color: white; padding: 10px 20px; border-radius: 5px; text-align: center; margin-top: 10px;">
+      <!-- 구글 로고 이미지 -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Google-logo.svg" alt="Google Logo" style="width: 24px; height: 24px; margin-right: 10px; vertical-align: middle;" />
       Sign in with Google
-    </button>
+    </a>
   </div>
 
 </body>

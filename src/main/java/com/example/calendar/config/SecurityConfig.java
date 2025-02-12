@@ -17,11 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // SecurityFilterChain을 설정하여 요청에 대한 접근을 제어
+    // HttpSecurity 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()  // CSRF 보호 비활성화
+            .csrf().disable()
             .authorizeHttpRequests()
                 .requestMatchers("/api/sample/all").permitAll()  // 공개된 API
                 .requestMatchers("/api/sample/member").authenticated()  // 인증된 사용자만 접근
@@ -29,58 +29,55 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 공개
                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
             .and()
-            .formLogin()  // 로그인 설정
-                .loginPage("/api/sample/login")  // 로그인 페이지 설정
+            .formLogin()
+                .loginPage("/api/sample/login")  // 커스터마이즈된 로그인 페이지
                 .loginProcessingUrl("/login")  // 로그인 처리 URL
-                .defaultSuccessUrl("/api/sample/all", true)  // 로그인 성공 후 이동할 URL (all.html)
-                .permitAll()  // 로그인 페이지 접근은 누구나 가능
+                .defaultSuccessUrl("/api/sample/member", true)  // 로그인 성공 후 이동할 URL
+                .permitAll()
+            .and()
+            .oauth2Login()  // Google OAuth2 로그인 활성화
+                .loginPage("/api/sample/login")  // 구글 로그인 페이지도 로그인 페이지에 통합
+                .defaultSuccessUrl("/api/sample/member", true)  // 구글 로그인 후 /api/sample/member로 리디렉션
+                .permitAll()
             .and()
             .logout()
-                .logoutUrl("/logout")  // 로그아웃 URL을 GET 방식으로 설정
-                .logoutSuccessUrl("/api/sample/login?logout=true")  // 로그아웃 후 로그인 페이지로 이동하고 로그아웃 알림 표시
-                .invalidateHttpSession(true)  // 세션 무효화
-                .clearAuthentication(true)  // 인증 정보 초기화
-                .permitAll();  // 로그아웃 페이지 접근은 누구나 가능
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/api/sample/login?logout=true")  // 로그아웃 후 리디렉션 URL
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .permitAll();
+
         return http.build();
     }
 
-    // 비밀번호 인코더 (BCryptPasswordEncoder 사용)
+    // 비밀번호 인코더 설정
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // BCryptPasswordEncoder 사용
+        return new BCryptPasswordEncoder();
     }
 
-    // UserDetailsService를 사용하여 사용자를 메모리에 등록
+    // UserDetailsService 설정 (InMemory 방식)
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        
-        // user1, 1111 설정 추가
         manager.createUser(User.withUsername("user1")
-                            .password(passwordEncoder.encode("1111"))  // 비밀번호 암호화
+                            .password(passwordEncoder.encode("1111"))
                             .roles("USER")
                             .build());
         manager.createUser(User.withUsername("admin")
-                            .password(passwordEncoder.encode("admin"))
+                            .password(passwordEncoder.encode("admin123"))
                             .roles("ADMIN")
-                            .build());
-        manager.createUser(User.withUsername("user")
-                            .password(passwordEncoder.encode("password"))  // 기존 user
-                            .roles("USER")
-                            .build());
+                            .build());  // ADMIN 계정 추가
         return manager;
     }
 
-    // AuthenticationManager 빈 등록
+    // AuthenticationManager 설정
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = 
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
-            .userDetailsService(userDetailsService(passwordEncoder()))  // 사용자 서비스 설정
-            .passwordEncoder(passwordEncoder());  // 비밀번호 인코더 설정
-
+            .userDetailsService(userDetailsService(passwordEncoder()))
+            .passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
 }

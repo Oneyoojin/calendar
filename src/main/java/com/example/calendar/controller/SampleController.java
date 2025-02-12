@@ -1,15 +1,11 @@
 package com.example.calendar.controller;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -17,12 +13,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequestMapping("/api/sample")
 public class SampleController {
-
-    private final AuthenticationManager authenticationManager;
-
-    public SampleController(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
 
     // /api/sample/all 경로를 처리
     @GetMapping("/all")
@@ -37,27 +27,25 @@ public class SampleController {
         return "login";  // login.html 페이지로 리턴
     }
 
-    // 로그인 처리 (POST 요청)
-    @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        try {
-            // AuthenticationManager를 사용해 인증 시도
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-            );
+    // 구글 로그인 후 리디렉션될 페이지 처리
+    @GetMapping("/member")
+    public String memberPage(Model model) {
+        // 인증된 사용자 정보 가져오기
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            // 인증 성공 시 SecurityContext에 인증 정보 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (principal instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User) principal;
+            String username = oAuth2User.getName();
+            String email = oAuth2User.getAttribute("email"); // 구글에서 제공하는 사용자 이메일 정보
+            log.info("Authenticated Google user: " + username + ", Email: " + email);
 
-            // 인증 정보 로그로 확인
-            log.info("Authenticated user: " + authentication.getName());
-
-            // 로그인 성공 시 /api/sample/all 페이지로 리디렉션
-            return "redirect:/api/sample/all";
-        } catch (Exception e) {
-            log.error("Login failed for user: " + username, e);
-            model.addAttribute("error", "Invalid username or password.");
-            return "login";  // 로그인 실패 시 login.html 페이지로 리턴
+            // 모델에 사용자 정보를 전달하여 뷰에서 사용할 수 있도록 함
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
+        } else {
+            log.info("Authenticated user: " + principal);
         }
+
+        return "member";  // member.html 페이지로 리턴
     }
 }
