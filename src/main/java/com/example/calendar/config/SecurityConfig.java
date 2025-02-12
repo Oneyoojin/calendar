@@ -32,7 +32,7 @@ public class SecurityConfig {
             .formLogin()
                 .loginPage("/api/sample/login")  // 로그인 페이지 설정
                 .loginProcessingUrl("/login")  // 로그인 처리 URL
-                .defaultSuccessUrl("/home", true)  // 로그인 성공 후 이동할 URL
+                .defaultSuccessUrl("/api/sample/all", true)  // 로그인 성공 후 이동할 URL (all.html)
                 .permitAll()  // 로그인 페이지 접근은 누구나 가능
             .and()
             .logout()
@@ -70,10 +70,13 @@ public class SecurityConfig {
     // AuthenticationManager 빈 등록
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                   .userDetailsService(userDetailsService(passwordEncoder()))  // 사용자 서비스 설정
-                   .passwordEncoder(passwordEncoder())  // 비밀번호 인코더 설정
-                   .and()
-                   .build();
+        AuthenticationManagerBuilder authenticationManagerBuilder = 
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        
+        authenticationManagerBuilder
+            .userDetailsService(userDetailsService(passwordEncoder()))  // 사용자 서비스 설정
+            .passwordEncoder(passwordEncoder());  // 비밀번호 인코더 설정
+
+        return authenticationManagerBuilder.build();
     }
 }

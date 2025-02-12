@@ -30,18 +30,6 @@ public class SampleController {
         return "all";  // all.html 페이지로 리턴
     }
 
-    // /api/sample/member 경로를 처리
-    @GetMapping("/member")
-    public String exMember() {
-        return "member";  // member.html 페이지로 리턴
-    }
-
-    // /api/sample/admin 경로를 처리
-    @GetMapping("/admin")
-    public String exAdmin() {
-        return "admin";  // admin.html 페이지로 리턴
-    }
-
     // 로그인 페이지를 처리
     @GetMapping("/login")
     public String showLoginPage() {
@@ -64,18 +52,12 @@ public class SampleController {
             // 인증 정보 로그로 확인
             log.info("Authenticated user: " + authentication.getName());
 
-            // 로그인 성공 시 /home 페이지로 리디렉션
-            return "redirect:/home";
+            // 로그인 성공 시 /api/sample/all 페이지로 리디렉션
+            return "redirect:/api/sample/all";
         } catch (Exception e) {
             log.error("Login failed for user: " + username, e);
             model.addAttribute("error", "Invalid username or password.");
             return "login";  // 로그인 실패 시 login.html 페이지로 리턴
         }
-    }
-
-    // /home 경로를 처리
-    @GetMapping("/home")
-    public String home() {
-        return "home";  // home.html 페이지로 리턴
     }
 }
