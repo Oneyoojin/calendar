@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/sample/all").permitAll()  // /all 페이지 접근 허용
                 .requestMatchers("/api/sample/member").authenticated()  // /member 페이지는 인증 필요
                 .requestMatchers("/api/sample/admin").hasRole("ADMIN")  // /admin 페이지는 ADMIN 역할 필요
-                .requestMatchers("/static/**", "/css/**", "/js/**").permitAll()  // 정적 리소스에 대한 접근 허용
+                .requestMatchers( "/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스에 대한 접근 허용
                 .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
             .and()
             .formLogin()

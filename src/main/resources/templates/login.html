@@ -3,42 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <title>SIGN IN</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  
+  <!-- CSS 파일 링크 (Thymeleaf 방식) -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  
+  <!-- JavaScript 파일 링크 (Thymeleaf 방식) -->
+  <script th:src="@{/js/script.js}" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
 
   <div class="container">
+    <!-- Heading -->
     <h1>SIGN IN</h1>
-
+    
+    <!-- Links -->
     <ul class="links">
-      <li><a href="#" id="signin" th:href="@{/signin}">SIGN IN</a></li>
-      <li><a href="#" id="signup" th:href="@{/signup}">SIGN UP</a></li>
-      <li><a href="#" id="reset" th:href="@{/reset}">RESET</a></li>
+      <li>
+        <a href="#" id="signin">SIGN IN</a>
+      </li>
+      <li>
+        <a href="#" id="signup">SIGN UP</a>
+      </li>
+      <li>
+        <a href="#" id="reset">RESET</a>
+      </li>
     </ul>
-
-    <!-- 로그인 폼 -->
-    <form action="/login" method="post">
+    
+    <!-- Form -->
+    <form action="" method="post">
+      <!-- email input -->
       <div class="first-input input__block first-input__block">
-         <input type="email" placeholder="Email" class="input" id="email" name="email" th:value="${email}" />
+         <input type="email" placeholder="Email" class="input" id="email" />
       </div>
+      <!-- password input -->
       <div class="input__block">
-         <input type="password" placeholder="Password" class="input" id="password" name="password" />
+         <input type="password" placeholder="Password" class="input" id="password" />
       </div>
-      <button class="signin__btn" type="submit">Sign in</button>
+      <!-- repeat password input -->
+      <div class="input__block">
+         <input type="password" placeholder="Repeat password" class="input repeat__password" id="repeat__password" />
+      </div>
+      <!-- sign in button -->
+      <button class="signin__btn">
+        Sign in
+      </button>
     </form>
-
+    
+    <!-- separator -->
     <div class="separator">
       <p>OR</p>
     </div>
-
+    
+    <!-- google button -->
     <button class="google__btn">
-      <i class="fa fa-google"></i> Sign in with Google
-    </button>
-
-    <button class="github__btn">
-      <i class="fa fa-github"></i> Sign in with GitHub
+      <i class="fa fa-google"></i>
+      Sign in with Google
     </button>
   </div>
 </body>
