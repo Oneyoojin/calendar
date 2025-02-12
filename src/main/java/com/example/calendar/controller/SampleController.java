@@ -57,15 +57,25 @@ public class SampleController {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             );
+
             // 인증 성공 시 SecurityContext에 인증 정보 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 인증 정보 로그로 확인
+            log.info("Authenticated user: " + authentication.getName());
 
             // 로그인 성공 시 /home 페이지로 리디렉션
             return "redirect:/home";
         } catch (Exception e) {
             log.error("Login failed for user: " + username, e);
             model.addAttribute("error", "Invalid username or password.");
-            return "login";  // login.html 페이지로 리턴
+            return "login";  // 로그인 실패 시 login.html 페이지로 리턴
         }
+    }
+
+    // /home 경로를 처리
+    @GetMapping("/home")
+    public String home() {
+        return "home";  // home.html 페이지로 리턴
     }
 }
