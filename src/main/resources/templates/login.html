@@ -33,6 +33,11 @@
       </li>
     </ul>
     
+    <!-- 로그아웃 후 알림 메시지 -->
+    <div th:if="${param.logout}">
+      <p style="color: green; font-weight: bold;">로그아웃 되었습니다.</p>
+    </div>
+    
     <!-- Form -->
     <form action="/api/sample/login" method="post">
       <!-- email input -->

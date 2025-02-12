@@ -21,7 +21,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()  // CSRF 보호 비활성화 (개발 중에만)
+            .csrf().disable()  // CSRF 보호 비활성화
             .authorizeHttpRequests()
                 .requestMatchers("/api/sample/all").permitAll()  // 공개된 API
                 .requestMatchers("/api/sample/member").authenticated()  // 인증된 사용자만 접근
@@ -29,14 +29,18 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 공개
                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
             .and()
-            .formLogin()
+            .formLogin()  // 로그인 설정
                 .loginPage("/api/sample/login")  // 로그인 페이지 설정
                 .loginProcessingUrl("/login")  // 로그인 처리 URL
                 .defaultSuccessUrl("/api/sample/all", true)  // 로그인 성공 후 이동할 URL (all.html)
                 .permitAll()  // 로그인 페이지 접근은 누구나 가능
             .and()
             .logout()
-                .permitAll();  // 로그아웃은 누구나 가능
+                .logoutUrl("/logout")  // 로그아웃 URL을 GET 방식으로 설정
+                .logoutSuccessUrl("/api/sample/login?logout=true")  // 로그아웃 후 로그인 페이지로 이동하고 로그아웃 알림 표시
+                .invalidateHttpSession(true)  // 세션 무효화
+                .clearAuthentication(true)  // 인증 정보 초기화
+                .permitAll();  // 로그아웃 페이지 접근은 누구나 가능
         return http.build();
     }
 
