@@ -12,17 +12,16 @@
 <body>
 
   <div class="container">
-    <h1>SIGN IN</h1>
+    <h1>
+      <img th:src="@{/images/icon.png}" alt="Icon" />
+    </h1>
     
     <ul class="links">
       <li>
-        <a href="#" id="signin">SIGN IN</a>
+        <a href="#" id="signin">로그인</a>
       </li>
       <li>
-        <a href="#" id="signup">SIGN UP</a>
-      </li>
-      <li>
-        <a href="#" id="reset">RESET</a>
+        <a href="#" id="signup">구글로 로그인</a>
       </li>
     </ul>
 
@@ -32,14 +31,14 @@
     
     <!-- 로그인 폼 -->
     <form action="/login" method="post">
+      <!-- 삼각형 추가 -->
+      <div class="triangle"></div>
+
       <div class="first-input input__block">
          <input type="text" placeholder="Username" class="input" id="username" name="username" required />
       </div>
       <div class="input__block">
          <input type="password" placeholder="Password" class="input" id="password" name="password" required />
-      </div>
-      <div class="input__block">
-         <input type="password" placeholder="Repeat Password" class="input repeat__password" id="repeat__password" />
       </div>
       <button class="signin__btn">Sign in</button>
 
@@ -53,9 +52,8 @@
     </div>
 
     <!-- 구글 로그인 버튼 -->
-    <a href="/oauth2/authorization/google" class="google__btn" style="display: inline-block; text-decoration: none; background-color: #4285F4; color: white; padding: 10px 20px; border-radius: 5px; text-align: center; margin-top: 10px;">
-      <!-- 구글 로고 이미지 -->
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Google-logo.svg" alt="Google Logo" style="width: 24px; height: 24px; margin-right: 10px; vertical-align: middle;" />
+    <a href="/oauth2/authorization/google" class="google__btn">
+      <img th:src="@{/images/icons.png}" alt="Google Logo" class="google-logo" />
       Sign in with Google
     </a>
   </div>
