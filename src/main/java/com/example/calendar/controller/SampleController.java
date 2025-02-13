@@ -25,6 +25,13 @@ public class SampleController {
         return "login";  // login.html 페이지로 리턴
     }
 
+    // 회원가입 페이지로 이동
+    @GetMapping("/register")
+    public String showRegistrationPage() {
+        log.info("/api/sample/register 요청 처리");
+        return "terms-agreement";  // terms-agreement.html 페이지로 이동
+    }
+
     // 구글 로그인 후 리디렉션될 페이지 처리
     @GetMapping("/member")
     public String memberPage(Model model) {
