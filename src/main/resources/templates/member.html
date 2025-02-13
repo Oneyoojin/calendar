@@ -1,13 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Page</title>
+    <title>Calender</title>
+    <link rel="stylesheet" href="/static/css/member.css?v=1.0">
+    <script src="/static/js/member.js"></script>
 </head>
 <body>
-    <h1>Welcome, ${username}!</h1>
-    <p>Email: ${email}</p>
-    <p><a href="/api/sample/all">Go to All Page</a></p>
+    <div class="sidebar">
+        <h2 class="title">Calender</h2>
+        <a href="#" class="button" onclick="addTask()">만들기</a>
+        <ul class="menu">
+            <li>모든 할 일</li>
+            <li>중요한 할 일</li>
+            <li>새 목록 만들기</li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="header">
+            <div class="tabs">
+                <button class="tab active">할 일</button>
+                <button class="tab">캘린더</button>
+            </div>
+            <div class="calendar-icon">
+                <img src="/static/images/icon.png" alt="캘린더 아이콘">
+            </div>
+        </div>
+        <div class="content">할 일을 추가해주세요.</div>
+    </div>
 </body>
 </html>

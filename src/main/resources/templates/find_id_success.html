@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 성공</title>
+    <link rel="stylesheet" th:href="@{/css/find-username-success.css}" />
+</head>
+<body>
+    <div class="container">
+        <!-- 로고 -->
+        <div class="logo">
+            <img th:src="@{/images/icon.png}" alt="Calender Logo"/>
+        </div>
+        
+        <!-- 아이디 찾기 안내 -->
+        <div class="section-title">
+            <h2>아이디 찾기</h2>
+            <div class="separator"></div>
+        </div>
+        
+        <p class="description">고객님의 정보와 일치하는 아이디 목록입니다.</p>
+        
+        <!-- 찾은 아이디 표시 -->
+        <div class="found-username">
+            <span class="username" th:text="${foundUsername}">abc ***</span>
+            <span class="date" th:text="${registeredDate}">2025. 1. 1</span>
+        </div>
+        
+        <!-- 버튼 그룹 -->
+        <div class="button-group">
+            <a href="/login" class="btn primary">로그인</a>
+            <a href="/find-password" class="btn secondary">비밀번호 찾기</a>
+        </div>
+    </div>
+</body>
+</html>

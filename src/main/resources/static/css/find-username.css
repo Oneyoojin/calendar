@@ -1,0 +1,94 @@
+/* 전체 컨테이너 스타일 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+/* 컨테이너 중앙 정렬 */
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 제목 스타일 */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* 로고 스타일 */
+.logo {
+  text-align: right;
+  margin-bottom: 30px; /* 로고 아래 간격 추가 */
+}
+.logo img {
+  width: 200px;
+  height: auto;
+  display: inline-block;
+  margin: 0;
+}
+
+/* 섹션 제목 스타일 */
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-top: 30px; /* 아이디 찾기와의 간격 추가 */
+}
+.section-title h2 {
+  margin: 0;
+  white-space: nowrap;
+}
+.section-title .separator {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #555;
+  margin-left: 10px;
+}
+
+/* 설명 스타일 */
+.description, .instruction {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* 입력 필드 스타일 */
+form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* 버튼 스타일 */
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4285F4;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+form button:hover {
+  background-color: #357AE8;
+}
+
+/* 오류 메시지 스타일 */
+.error-message {
+  font-size: 14px;
+  color: red;
+  margin-top: 15px;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" th:href="@{/css/find-username.css}" />
+</head>
+<body>
+    <div class="container">
+        <!-- 로고 -->
+        <div class="logo">
+            <img th:src="@{/images/icon.png}" alt="Calender Logo"/>
+        </div>
+
+        <!-- 아이디 찾기 안내 -->
+        <div class="section-title">
+            <h2>아이디 찾기</h2>
+            <div class="separator"></div>
+        </div>
+
+        <p class="description">고객님의 정보와 일치하는 아이디 목록입니다.</p>
+
+        <!-- 입력 폼 -->
+        <form th:action="@{/api/sample/find-username}" method="post">
+            <input type="text" name="username" placeholder="이름 입력" required>
+            <input type="date" name="birthdate" required>
+            <button type="submit">다음</button>
+        </form>
+
+        <!-- 오류 메시지 -->
+        <p class="error-message" th:if="${error}" th:text="${error}"></p>
+    </div>
+</body>
+</html>
