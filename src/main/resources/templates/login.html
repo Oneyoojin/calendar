@@ -40,7 +40,7 @@
       <div class="input__block">
          <input type="password" placeholder="Password" class="input" id="password" name="password" required />
       </div>
-      <button class="signin__btn">Sign in</button>
+      <button class="signin__btn">로그인 하기</button>
 
       <div th:if="${error}" class="error-message">
         <p th:text="${error}" style="color: red; font-weight: bold;"></p>
@@ -54,7 +54,7 @@
     <!-- 구글 로그인 버튼 -->
     <a href="/oauth2/authorization/google" class="google__btn">
       <img th:src="@{/images/icons.png}" alt="Google Logo" class="google-logo" />
-      Sign in with Google
+      구글 연동하기
     </a>
   </div>
 

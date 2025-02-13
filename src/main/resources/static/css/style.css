@@ -11,7 +11,7 @@ body {
 }
 
 h1 {
-  color: #e91e63;
+  color: #4285F4;
   font-size: 48px;
   letter-spacing: -3px;
   text-align: center;
@@ -84,7 +84,7 @@ form {
 }
 
 .signin__btn {
-  background: #e91e63;
+  background: #4285F4;
   color: white;
   display: block;
   width: 92.5%;
@@ -108,7 +108,7 @@ form {
   max-width: 680px;
   height: 50px;
   margin: 20px auto;
-  background: #4285F4;
+  background: #afafaf;
   color: white;
   border-radius: 8px;
   text-decoration: none;
@@ -162,5 +162,5 @@ form {
 }
 
 #signin {
-  margin-left: 10mm; /* 로그인 텍스트만 오른쪽으로 10mm 이동 */
+  margin-left: 10mm;
 }
