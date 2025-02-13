@@ -3,11 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const agreeItems = document.querySelectorAll(".agree-item");
     const nextButton = document.getElementById("nextButton");
 
+    if (!agreeAll || agreeItems.length === 0 || !nextButton) {
+        console.error("필수 요소가 존재하지 않습니다.");
+        return;
+    }
+
     // 전체 동의 체크박스 이벤트
     agreeAll.addEventListener("change", function () {
         agreeItems.forEach(item => {
             item.checked = agreeAll.checked;
-            item.dispatchEvent(new Event("change")); // 이벤트 강제 실행
         });
         updateButtonState();
     });
@@ -25,4 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateButtonState() {
         nextButton.disabled = ![...agreeItems].every(i => i.checked);
     }
+
+    // 초기 버튼 상태 업데이트 (페이지 로드 시)
+    updateButtonState();
 });
