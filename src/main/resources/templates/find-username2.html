@@ -3,55 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calender Form</title>
+    <title>Calendar Form</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/find-username2.css}">
 </head>
-<body class="flex flex-col items-center min-h-screen py-10">
+<body class="flex flex-col items-center min-h-screen py-10 bg-gray-100">
     
-    <!-- 로고 (CSS에서 스타일 적용) -->
-    <div class="logo">
-        <img th:src="@{/images/icon.png}" alt="Calender Logo">
+    <!-- 로고 -->
+    <div class="logo mb-6">
+        <img th:src="@{/images/icon.png}" alt="Calendar Logo" class="w-24">
     </div>
 
-    <!-- 입력 필드 -->
-    <form th:action="@{/api/sample/find-username2}" method="post" class="w-full max-w-lg px-6">
+    <!-- 오류 메시지 -->
+    <p class="text-red-500 text-center font-semibold mb-4" th:if="${error}" th:text="${error}"></p>
+
+    <!-- 입력 폼 -->
+    <form th:action="@{/api/sample/find-username2}" method="post"
+          th:object="${user}" th:if="${user != null}" 
+          class="w-full max-w-lg px-6 bg-white p-8 rounded-lg shadow-md">
         
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" placeholder="생년월일" name="birthdate" th:value="${birthdate}" required 
-                   class="w-full p-3 text-center bg-gray-200 rounded-md">
-            <input type="text" placeholder="이름" name="name" th:value="${name}" required 
-                   class="w-full p-3 text-center bg-gray-200 rounded-md">
+            <input type="date" placeholder="생년월일" th:field="*{dateOfBirth}" required 
+                   class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <input type="text" placeholder="이름" th:field="*{username}" required 
+                   class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" placeholder="내국인 / 외국인" name="nationality" th:value="${nationality}" required 
-                   class="w-full p-3 text-center bg-gray-200 rounded-md">
-            <input type="text" placeholder="남자 / 여자" name="gender" th:value="${gender}" required 
-                   class="w-full p-3 text-center bg-gray-200 rounded-md">
+            <select th:field="*{isDomestic}" required class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="true">내국인</option>
+                <option value="false">외국인</option>
+            </select>
+            <select th:field="*{gender}" required class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
+                <option value="기타">기타</option>
+            </select>
         </div>
 
         <div class="mb-4">
-            <input type="email" placeholder="[선택] 이메일 주소" name="email" th:value="${email}" 
-                   class="w-full p-3 text-center bg-gray-200 rounded-md">
+            <input type="email" placeholder="[선택] 이메일 주소" th:field="*{email}" 
+                   class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
         </div>
 
         <!-- 이용약관 동의 -->
         <div class="flex items-center justify-center mb-4">
-            <input type="checkbox" id="agreeAll" class="mr-2">
+            <input type="checkbox" id="agreeAll" th:checked="*{isActive}" required class="mr-2">
             <label for="agreeAll" class="font-bold text-gray-700">[필수] 이용약관 전체 동의</label>
         </div>
 
-        <!-- 버튼 -->
-        <a id="nextLink" href="find-username2.html" class="w-full">
-            <button type="submit" id="nextButton" disabled
-                    class="w-full h-12 bg-gray-400 text-white font-bold rounded-md cursor-not-allowed">
-                다음
-            </button>
-        </a>
-
-        <!-- 오류 메시지 -->
-        <p class="error-message text-red-500 mt-3 text-center" th:if="${error}" th:text="${error}"></p>
+        <!-- 제출 버튼 -->
+        <button type="submit"
+                class="w-full h-12 bg-blue-500 text-white font-bold rounded-md cursor-pointer hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 transition">
+            다음
+        </button>
     </form>
 
     <script th:src="@{/js/calender-form.js}"></script>

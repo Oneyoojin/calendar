@@ -1,6 +1,7 @@
 $(document).ready(function() {
-  let $signup = $(".links li #signup"); 
-  let $signin = $(".links li #signin"); 
+  let $signup = $("#signup"); 
+  let $signin = $("#signin"); 
+  let $googleLogin = $(".google__btn"); // 구글 로그인 버튼
   let $firstInput = $("form").find(".first-input");
   let $hiddenInput = $("form").find(".input__block #repeat__password");
   let $signinBtn = $("form").find(".signin__btn");
@@ -16,7 +17,6 @@ $(document).ready(function() {
     $hiddenInput.stop(true, true).fadeIn(200);  // 애니메이션 효과 추가
     $signinBtn.text("Sign up");
     $triangle.css("left", "150px"); // 삼각형 위치 변경
-    $(".links li a").css("margin-left", "30mm"); // 버튼을 삼각형 위치에 맞춰 이동
   });
 
   //----------- sign in ---------------------
@@ -29,7 +29,12 @@ $(document).ready(function() {
     $hiddenInput.stop(true, true).fadeOut(200);  // 애니메이션 효과 추가
     $signinBtn.text("Sign in");
     $triangle.css("left", "50px"); // 삼각형 위치 변경
-    $(".links li a").css("margin-left", "20mm"); // 버튼을 삼각형 위치에 맞춰 이동
+  });
+
+  //----------- Google Login (구글 로그인 버튼 클릭 시) ---------------------
+  $googleLogin.on("click", function(e) {
+    e.preventDefault();  // 기본 동작 방지 (테스트용)
+    $triangle.css("left", "250px"); // 삼각형을 구글 로그인 버튼 쪽으로 이동
   });
 
   // OR 구분선 복원
