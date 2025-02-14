@@ -2,35 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>아이디 찾기 성공</title>
-    <link rel="stylesheet" th:href="@{/css/find-username-success.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/find-username.css}">
 </head>
-<body>
-    <div class="container">
-        <!-- 로고 -->
-        <div class="logo">
-            <img th:src="@{/images/icon.png}" alt="Calender Logo"/>
+<body class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-xl font-bold text-blue-600 text-center mb-4">아이디 찾기</h1>
+
+        <!-- 이용약관 전체 동의 -->
+        <div class="mb-4">
+            <label class="flex items-center">
+                <input type="checkbox" id="agreeAll" class="mr-2">
+                <span class="text-gray-700 font-bold">[필수] 이용약관 전체 동의</span>
+            </label>
         </div>
-        
-        <!-- 아이디 찾기 안내 -->
-        <div class="section-title">
-            <h2>아이디 찾기</h2>
-            <div class="separator"></div>
+
+        <!-- 개별 동의 항목 -->
+        <div class="mb-4 space-y-2">
+            <label class="flex items-center">
+                <input type="checkbox" class="agree-item mr-2">
+                <span class="text-gray-700">[필수] 개인정보 수집 및 이용 동의</span>
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" class="agree-item mr-2">
+                <span class="text-gray-700">[필수] 서비스 이용 약관 동의</span>
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" class="agree-item mr-2">
+                <span class="text-gray-700">[필수] 마케팅 수신 동의</span>
+            </label>
         </div>
-        
-        <p class="description">고객님의 정보와 일치하는 아이디 목록입니다.</p>
-        
-        <!-- 찾은 아이디 표시 -->
-        <div class="found-username">
-            <span class="username" th:text="${foundUsername}">abc ***</span>
-            <span class="date" th:text="${registeredDate}">2025. 1. 1</span>
-        </div>
-        
-        <!-- 버튼 그룹 -->
-        <div class="button-group">
-            <a href="/login" class="btn primary">로그인</a>
-            <a href="/find-password" class="btn secondary">비밀번호 찾기</a>
-        </div>
+
+        <!-- "다음" 버튼 -->
+        <button id="nextButton" class="w-full p-3 bg-blue-600 text-white font-bold rounded-md disabled:opacity-50" disabled>
+            다음
+        </button>
     </div>
+
+    <!-- JavaScript 파일 연결 -->
+    <script th:src="@{/js/find-username.js}"></script>
 </body>
 </html>

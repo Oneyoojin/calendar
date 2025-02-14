@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calender Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/find-username2.css}">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <div class="logo">
+                <img th:src="@{/images/icon.png}" alt="Calender Logo">
+            </div>
+            <div class="color-boxes">
+                <div class="red"></div>
+                <div class="blue"></div>
+                <div class="yellow"></div>
+            </div>
+        </div>
+
+        <!-- 입력 필드 -->
+        <div class="form-group">
+            <input type="text" placeholder="생년월일" id="birthdate" th:value="${birthdate}">
+            <input type="text" placeholder="이름" id="name" th:value="${name}">
+        </div>
+        <div class="form-group">
+            <input type="text" placeholder="내국인 / 외국인" id="nationality" th:value="${nationality}">
+            <input type="text" placeholder="남자 / 여자" id="gender" th:value="${gender}">
+        </div>
+        <div class="input-group">
+            <input type="email" placeholder="[선택] 이메일 주소" id="email" th:value="${email}">
+        </div>
+
+        <!-- 이용약관 동의 -->
+        <div class="terms">
+            <label>
+                <input type="checkbox" id="agreeAll"> <span class="bold">[필수] 이용약관 전체 동의</span>
+            </label>
+        </div>
+
+        <!-- 버튼 -->
+        <button id="nextButton" disabled>다음</button>
+    </div>
+
+    <script th:src="@{/js/calender-form.js}"></script>
+</body>
+</html>

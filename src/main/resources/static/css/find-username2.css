@@ -1,0 +1,107 @@
+/* 전체 컨테이너 스타일 */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 카드 스타일 */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+/* 로고 스타일 */
+.logo img {
+    width: 120px;  /* 로고 크기 조정 */
+    height: auto;
+}
+
+/* 컬러 박스 스타일 */
+.color-boxes {
+    display: flex;
+    gap: 4px;
+}
+
+.color-boxes div {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.red { background-color: #dc2626; }
+.blue { background-color: #2563eb; }
+.yellow { background-color: #facc15; }
+
+/* 폼 입력 스타일 */
+.form-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.form-group input,
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #e5e7eb;
+    border: none;
+    border-radius: 8px;
+    color: #6b7280;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 이용약관 스타일 */
+.terms {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.terms label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* 버튼 스타일 */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+button:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}

@@ -17,46 +17,46 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // HttpSecurity 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeHttpRequests()
+            .csrf().disable() // 🔥 CSRF 보호 비활성화 (테스트용)
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/sample/register", "/api/sample/find-username2").permitAll() // 🔥 회원가입 및 find-username2 허용
+                .requestMatchers("/find-username2.html").permitAll() // 🔥 정적 HTML 파일 접근 허용
                 .requestMatchers("/api/sample/all").permitAll()  // 공개된 API
                 .requestMatchers("/api/sample/member").authenticated()  // 인증된 사용자만 접근
                 .requestMatchers("/api/sample/admin").hasRole("ADMIN")  // ADMIN 역할만 접근
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 공개
                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
-            .and()
-            .formLogin()
-                .loginPage("/api/sample/login")  // 커스터마이즈된 로그인 페이지
-                .loginProcessingUrl("/login")  // 로그인 처리 URL
-                .defaultSuccessUrl("/api/sample/member", true)  // 로그인 성공 후 이동할 URL
+            )
+            .formLogin(login -> login
+                .loginPage("/api/sample/login")  // 로그인 페이지
+                .loginProcessingUrl("/login")  
+                .defaultSuccessUrl("/api/sample/member", true)  
                 .permitAll()
-            .and()
-            .oauth2Login()  // Google OAuth2 로그인 활성화
-                .loginPage("/api/sample/login")  // 구글 로그인 페이지도 로그인 페이지에 통합
-                .defaultSuccessUrl("/api/sample/member", true)  // 구글 로그인 후 /api/sample/member로 리디렉션
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/api/sample/login")  
+                .defaultSuccessUrl("/api/sample/member", true)  
                 .permitAll()
-            .and()
-            .logout()
+            )
+            .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/api/sample/login?logout=true")  // 로그아웃 후 리디렉션 URL
+                .logoutSuccessUrl("/api/sample/login?logout=true")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .permitAll();
+                .permitAll()
+            );
 
         return http.build();
     }
 
-    // 비밀번호 인코더 설정
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // UserDetailsService 설정 (InMemory 방식)
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -67,17 +67,16 @@ public class SecurityConfig {
         manager.createUser(User.withUsername("admin")
                             .password(passwordEncoder.encode("admin123"))
                             .roles("ADMIN")
-                            .build());  // ADMIN 계정 추가
+                            .build());
         return manager;
     }
 
-    // AuthenticationManager 설정
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
-            .userDetailsService(userDetailsService(passwordEncoder()))
-            .passwordEncoder(passwordEncoder());
+            .userDetailsService(userDetailsService(passwordEncoder))
+            .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
 }
