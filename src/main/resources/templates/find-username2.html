@@ -43,10 +43,12 @@
         </div>
 
         <!-- 버튼 -->
-        <button type="submit" id="nextButton" disabled
-                class="w-full h-12 bg-gray-400 text-white font-bold rounded-md cursor-not-allowed">
-            다음
-        </button>
+        <a id="nextLink" href="find-username2.html" class="w-full">
+            <button type="submit" id="nextButton" disabled
+                    class="w-full h-12 bg-gray-400 text-white font-bold rounded-md cursor-not-allowed">
+                다음
+            </button>
+        </a>
 
         <!-- 오류 메시지 -->
         <p class="error-message text-red-500 mt-3 text-center" th:if="${error}" th:text="${error}"></p>
