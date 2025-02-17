@@ -24,6 +24,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/sample/register", "/api/sample/find-username2").permitAll()
+                .requestMatchers("/api/sample/find-username3", "/api/sample/process-find-username").permitAll()  // ✅ 추가된 허용 경로
                 .requestMatchers("/api/sample/login").permitAll()  
                 .requestMatchers("/error").permitAll()  // ✅ 에러 페이지 접근 허용
                 .requestMatchers("/api/sample/all").permitAll()

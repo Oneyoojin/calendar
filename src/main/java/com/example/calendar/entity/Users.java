@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,34 +15,49 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id") // 기존 `id` → `user_id`로 수정
     private Long userId;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, length = 100)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean isDomestic = true;
+    @Column(nullable = false)
+    private boolean isDomestic;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean isActive = true;
+    @Column(nullable = false)
+    private boolean isActive;
 
-    private LocalDateTime lastLogin;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     public enum Gender {
         남성, 여성, 기타
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }
