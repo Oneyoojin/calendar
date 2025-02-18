@@ -22,33 +22,40 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
             .authorizeRequests(auth -> auth
-                .requestMatchers("/api/calendar/register", "/api/calendar/find-username2").permitAll()
-                .requestMatchers("/api/calendar/find-username3", "/api/calendar/process-find-username").permitAll()  // 추가된 허용 경로
-                .requestMatchers("/api/calendar/login").permitAll()
-                .requestMatchers("/error").permitAll()  // 에러 페이지 접근 허용
-                .requestMatchers("/api/calendar/all").permitAll()
-                .requestMatchers("/api/calendar/member").authenticated()
-                .requestMatchers("/api/calendar/admin").hasRole("ADMIN")
+                .requestMatchers(
+                    "/api/calendar/register", 
+                    "/api/calendar/find-username", 
+                    "/api/calendar/find-username-result", 
+                    "/api/calendar/find-username2",
+                    "/api/calendar/find-password",  // 🔹 비밀번호 찾기 추가
+                    "/api/calendar/reset-password",  // 🔹 비밀번호 재설정 추가
+                    "/api/calendar/login", 
+                    "/error", 
+                    "/api/calendar/all",
+                    "/api/calendar/success"
+                ).permitAll()  // 특정 페이지 및 정적 리소스 허용
+                
+                .requestMatchers("/api/calendar/member").authenticated()  // 회원만 접근 가능
+                .requestMatchers("/api/calendar/admin").hasRole("ADMIN")  // 관리자만 접근 가능
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
-                .requestMatchers("/success.html").permitAll()  // success.html 페이지 접근 허용
-                .requestMatchers("/api/calendar/success").permitAll()  // /api/calendar/success 경로 허용
-                .anyRequest().authenticated()
+                
+                .anyRequest().authenticated()  // 나머지 요청은 인증 필요
             )
             .formLogin(login -> login
-                .loginPage("/api/calendar/login")  // 로그인 페이지 수정
+                .loginPage("/api/calendar/login")  // 로그인 페이지 설정
                 .loginProcessingUrl("/login")  
-                .defaultSuccessUrl("/api/calendar/all", true)
-                .failureUrl("/api/calendar/login?error=true")  
+                .defaultSuccessUrl("/api/calendar/all", true)  // 로그인 성공 후 리디렉션
+                .failureUrl("/api/calendar/login?error=true")  // 로그인 실패 후 리디렉션
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
-                .loginPage("/api/calendar/login")  // OAuth2 로그인 페이지 수정
-                .defaultSuccessUrl("/api/calendar/member", true)  
+                .loginPage("/api/calendar/login")  // OAuth2 로그인 페이지 설정
+                .defaultSuccessUrl("/api/calendar/member", true)  // OAuth2 로그인 성공 후 리디렉션
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")  
-                .logoutSuccessUrl("/api/calendar/login?logout=true")  
+                .logoutSuccessUrl("/api/calendar/login?logout=true")  // 로그아웃 후 리디렉션
                 .invalidateHttpSession(true)  
                 .clearAuthentication(true)  
                 .permitAll()
@@ -59,12 +66,12 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();  // 비밀번호 암호화 방식
     }
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        // InMemoryUserDetailsManager를 이용하여 간단한 사용자 관리 (실제 DB로 변경 가능)
+        // InMemoryUserDetailsManager를 이용한 사용자 관리 (실제 DB로 변경 가능)
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user1")
                 .password(passwordEncoder.encode("1111"))

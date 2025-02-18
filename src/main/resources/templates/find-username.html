@@ -20,15 +20,21 @@
 
         <p class="description">고객님의 정보와 일치하는 아이디 목록입니다.</p>
 
-        <!-- 입력 폼 -->
+        <!-- 아이디 찾기 폼 -->
         <form th:action="@{/api/calendar/find-username}" method="post">
-            <input type="email" name="email" placeholder="이메일 입력" required>
+            <input type="text" name="email" placeholder="이메일 입력" required>
             <input type="date" name="birthdate" required>
-            <button type="submit">다음</button>
+            <button type="submit" class="primary">다음</button>
         </form>
 
         <!-- 오류 메시지 -->
         <p class="error-message" th:if="${error}" th:text="${error}"></p>
+
+        <!-- 아이디 찾기 성공 시 결과 표시 및 로그인하기 버튼 -->
+        <div th:if="${foundUsername != null}">
+            <p>찾은 아이디: <span th:text="${foundUsername}"></span></p>
+            <button th:onclick="window.location.href='/api/calendar/login'" class="primary">로그인하기</button>
+        </div>
     </div>
 </body>
 </html>

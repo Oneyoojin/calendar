@@ -1,0 +1,114 @@
+/* 전체 컨테이너 스타일 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    text-align: center;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    color: #333; /* 텍스트 색상 */
+  }
+  
+  /* 로고 스타일 (우측 상단 고정) */
+  .logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .logo img {
+    width: 220px;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* 컨테이너 중앙 정렬 */
+  .container {
+    max-width: 500px;
+    width: 100%;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* 섹션 제목 스타일 */
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .section-title h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .section-title .separator {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ecf0f1;
+    margin-left: 10px;
+  }
+  
+  /* 설명 스타일 */
+  .description {
+    font-size: 15px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+  
+  /* 버튼 그룹 정렬 */
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  /* 버튼 스타일 */
+  .primary {
+    padding: 12px 20px;
+    background-color: #4285F4;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .primary:hover {
+    background-color: #357ae8;
+    transform: scale(1.05);
+  }
+  
+  /* 오류 메시지 스타일 */
+  .error-message {
+    font-size: 14px;
+    color: #e74c3c;
+    margin-top: 20px;
+  }
+  
+  /* 작은 화면에서 입력 필드 너비를 100%로 설정 */
+  @media (max-width: 600px) {
+    .container {
+      padding: 20px;
+    }
+  
+    .logo img {
+      width: 200px;
+    }
+  }
+  

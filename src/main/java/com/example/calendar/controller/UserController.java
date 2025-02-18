@@ -26,9 +26,23 @@ public class UserController {
         return "all";  // all.html 템플릿을 반환
     }
 
-    @GetMapping("/find-username") // 아이디 찾기 들어가기
+    @GetMapping("/find-username") // 아이디 찾기 페이지
     public String findUsernamePage() {
         return "find-username";  // find-username.html로 이동
+    }
+
+    @PostMapping("/find-username") // 아이디 찾기 처리
+    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) {
+        LocalDate birthDate = LocalDate.parse(birthdate); // 문자열을 LocalDate로 변환
+        String foundUsername = userService.findUsernameByEmailAndBirthdate(email, birthDate);
+
+        if (foundUsername == null || foundUsername.isEmpty()) {
+            model.addAttribute("error", "일치하는 아이디를 찾을 수 없습니다."); // 실패 메시지 추가
+            return "find-username";  // 실패 시 다시 find-username 페이지로 이동
+        }
+
+        model.addAttribute("foundUsername", foundUsername); // 찾은 아이디를 모델에 추가
+        return "find-username-result"; // 아이디 찾기 성공 후 결과 페이지로 이동
     }
 
     @GetMapping("/register")
@@ -52,7 +66,6 @@ public class UserController {
         String result = userService.registerUser(userDto); // UserService의 회원가입 로직 실행
 
         if (result.equals("회원가입 성공!")) {
-            // ✅ 회원가입 성공 시 success 페이지로 이동하면서 username을 전달
             return "redirect:/api/calendar/success?username=" + userDto.getUsername();
         } else {
             model.addAttribute("error", result); // 실패 시 에러 메시지를 모델에 추가
@@ -63,17 +76,7 @@ public class UserController {
     // ✅ 회원가입 성공 페이지
     @GetMapping("/success")
     public String showSuccessPage(@RequestParam(name = "username", required = false) String username, Model model) {
-        // 사용자 이름을 모델에 추가하여 success.html로 전달
         model.addAttribute("username", username != null ? username : "사용자 이름 없음");
         return "success";  // success.html 템플릿을 렌더링 (Thymeleaf 템플릿 사용)
-    }
-
-    // 아이디 찾기 처리 (이메일과 생년월일로 아이디 찾기)
-    @PostMapping("/find-username")
-    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) {
-        LocalDate birthDate = LocalDate.parse(birthdate); // 문자열을 LocalDate로 변환
-        String result = userService.findUsernameByEmailAndBirthdate(email, birthDate);
-        model.addAttribute("error", result); // 결과를 모델에 추가
-        return "find-username-result"; // 결과 페이지로 리다이렉트
     }
 }
