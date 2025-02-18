@@ -22,7 +22,7 @@
 
         <!-- 입력 폼 -->
         <form th:action="@{/api/calendar/find-username}" method="post">
-            <input type="text" name="username" placeholder="이름 입력" required>
+            <input type="email" name="email" placeholder="이메일 입력" required>
             <input type="date" name="birthdate" required>
             <button type="submit">다음</button>
         </form>

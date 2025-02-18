@@ -2,7 +2,6 @@ package com.example.calendar;
 
 import com.example.calendar.dto.Userdto;
 import com.example.calendar.entity.Users;
-import com.example.calendar.entity.Users.Gender;
 import com.example.calendar.repository.UsersRepository;
 import com.example.service.UserService;
 import org.junit.jupiter.api.BeforeEach;

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/api/calendar")
 @RequiredArgsConstructor
@@ -18,15 +20,16 @@ public class UserController {
     public String showLoginPage() {
         return "login";  // 로그인 페이지로 이동
     }
-    @GetMapping("/all") // 로그인 하고 첫 메인화면
+
+    @GetMapping("/all") // 로그인 후 첫 메인화면
     public String showAllPage() {
         return "all";  // all.html 템플릿을 반환
     }
+
     @GetMapping("/find-username") // 아이디 찾기 들어가기
     public String findUsernamePage() {
-    return "find-username";  // find-username.html로 이동
+        return "find-username";  // find-username.html로 이동
     }
-
 
     @GetMapping("/register")
     public String showRegistrationPage() {
@@ -63,5 +66,14 @@ public class UserController {
         // 사용자 이름을 모델에 추가하여 success.html로 전달
         model.addAttribute("username", username != null ? username : "사용자 이름 없음");
         return "success";  // success.html 템플릿을 렌더링 (Thymeleaf 템플릿 사용)
+    }
+
+    // 아이디 찾기 처리 (이메일과 생년월일로 아이디 찾기)
+    @PostMapping("/find-username")
+    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) {
+        LocalDate birthDate = LocalDate.parse(birthdate); // 문자열을 LocalDate로 변환
+        String result = userService.findUsernameByEmailAndBirthdate(email, birthDate);
+        model.addAttribute("error", result); // 결과를 모델에 추가
+        return "find-username-result"; // 결과 페이지로 리다이렉트
     }
 }

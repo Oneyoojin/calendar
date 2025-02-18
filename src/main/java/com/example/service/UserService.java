@@ -20,7 +20,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public String registerUser(Userdto userDto) {
-        // 1️⃣ 아이디 유효성 검사 (최대 8자, 영문+숫자만 허용)
+        // 기존 회원가입 로직
         if (userDto.getUsername() == null || userDto.getUsername().length() > 8) {
             return "아이디는 최대 8자까지 입력 가능합니다.";
         }
@@ -28,7 +28,6 @@ public class UserService {
             return "아이디는 영문과 숫자로만 입력해야 합니다.";
         }
 
-        // 2️⃣ 비밀번호 유효성 검사 (최대 8자, 영문+숫자만 허용)
         if (userDto.getPassword() == null || userDto.getPassword().length() > 8) {
             return "비밀번호는 최대 8자까지 입력 가능합니다.";
         }
@@ -36,30 +35,25 @@ public class UserService {
             return "비밀번호는 영문과 숫자로만 입력해야 합니다.";
         }
 
-        // 3️⃣ 아이디 중복 검사
         Optional<Users> existingUser = usersRepository.findByUsername(userDto.getUsername());
         if (existingUser.isPresent()) {
             return "이미 가입된 아이디입니다.";
         }
 
-        // 4️⃣ 이메일 필수 체크
         if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
             return "이메일을 입력해주세요.";
         }
 
-        // 5️⃣ 이메일 중복 검사
         Optional<Users> existingEmail = usersRepository.findByEmail(userDto.getEmail());
         if (existingEmail.isPresent()) {
             return "이미 가입된 이메일입니다.";
         }
 
-        // 6️⃣ 생년월일 검증
         LocalDate birthdate = userDto.getBirthdate();
         if (birthdate == null) {
             return "생년월일을 입력해주세요.";
         }
 
-        // 7️⃣ 성별 변환 (String → Enum)
         Gender gender;
         try {
             gender = Gender.valueOf(userDto.getGender().toUpperCase());
@@ -67,19 +61,30 @@ public class UserService {
             return "올바르지 않은 성별 값입니다. (남성, 여성, 기타 중 선택)";
         }
 
-        // 8️⃣ 사용자 저장
         Users user = Users.builder()
                 .username(userDto.getUsername())
-                .password(passwordEncoder.encode(userDto.getPassword())) // 비밀번호 암호화
-                .email(userDto.getEmail()) // 이메일은 반드시 입력되어야 하므로 null 체크가 필요 없음
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .email(userDto.getEmail())
                 .dateOfBirth(birthdate)
                 .gender(gender)
                 .isDomestic(userDto.isDomestic())
-                .isActive(true) // 기본값 설정
+                .isActive(true)
                 .build();
 
-        // 9️⃣ 사용자 저장
         usersRepository.save(user);
         return "회원가입 성공!";
+    }
+
+    // 아이디 찾기 기능 추가
+    public String findUsernameByEmailAndBirthdate(String email, LocalDate birthdate) {
+        // 이메일과 생년월일을 사용해 사용자 조회
+        Optional<Users> userOptional = usersRepository.findByEmailAndDateOfBirth(email, birthdate);
+
+        if (userOptional.isPresent()) {
+            Users user = userOptional.get();
+            return "찾은 아이디: " + user.getUsername(); // 아이디 반환
+        } else {
+            return "일치하는 아이디가 없습니다."; // 일치하는 사용자가 없을 경우
+        }
     }
 }

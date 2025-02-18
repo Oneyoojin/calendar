@@ -2,26 +2,18 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   text-align: center;
   background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  color: #333; /* 텍스트 색상 */
 }
 
-/* 컨테이너 중앙 정렬 */
-.container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* 제목 스타일 */
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 30px;
-}
-
-/* 로고 스타일 */
+/* 로고 스타일 (우측 상단 고정) */
 .logo {
   position: absolute;
   top: 20px;
@@ -29,66 +21,112 @@ body {
 }
 
 .logo img {
-  width: 250px;
+  width: 220px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 컨테이너 중앙 정렬 */
+.container {
+  max-width: 500px;
+  width: 100%;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 세련된 그림자 효과 */
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* 제목 스타일 */
+.title {
+  font-size: 28px;
+  font-weight: 600;
   margin-bottom: 20px;
+  color: #2c3e50; /* 다크한 색상 */
 }
 
 /* 섹션 제목 스타일 */
 .section-title {
   display: flex;
   align-items: center;
-  margin-top: 30px; /* 아이디 찾기와의 간격 추가 */
+  justify-content: center;
+  margin-top: 30px;
 }
+
 .section-title h2 {
+  font-size: 22px;
+  font-weight: 500;
   margin: 0;
-  white-space: nowrap;
+  color: #34495e; /* 은은한 다크 색상 */
 }
+
 .section-title .separator {
   flex-grow: 1;
   height: 1px;
-  background-color: #555;
+  background-color: #ecf0f1; /* 부드러운 그레이 */
   margin-left: 10px;
 }
 
 /* 설명 스타일 */
 .description, .instruction {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 15px;
+  font-size: 15px;
+  color: #7f8c8d; /* 부드러운 그레이 */
+  margin-bottom: 20px;
 }
 
 /* 입력 필드 스타일 */
 form input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 15px;
+  margin: 15px 0;
+  border: 1px solid #bdc3c7; /* 부드러운 회색 */
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2c3e50;
+  background-color: #ecf0f1; /* 밝은 회색 배경 */
   box-sizing: border-box;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #3498db; /* 파란색 테두리 */
+  background-color: #ffffff; /* 포커스 시 배경색 변경 */
 }
 
 /* 버튼 스타일 */
 form button {
   width: 100%;
-  padding: 12px;
-  background-color: #4285F4;
+  padding: 14px;
+  background-color:  #4285F4;
   color: white;
   border-radius: 5px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 15px;
   box-sizing: border-box;
-}
-
-form button:hover {
-  background-color: #357AE8;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 /* 오류 메시지 스타일 */
 .error-message {
   font-size: 14px;
-  color: red;
-  margin-top: 15px;
+  color: #e74c3c; /* 오류 메시지 색상 */
+  margin-top: 20px;
+}
+
+/* 작은 화면에서 입력 필드 너비를 100%로 설정 */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  .logo img {
+    width: 200px;
+  }
 }
