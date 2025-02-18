@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/sample/all").permitAll()
                 .requestMatchers("/api/sample/member").authenticated()
                 .requestMatchers("/api/sample/admin").hasRole("ADMIN")
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // ✅ 정적 리소스 허용
                 .requestMatchers("/success.html").permitAll() // ✅ success.html 페이지 접근 허용
                 .requestMatchers("/api/sample/success").permitAll() // ✅ /api/sample/success 경로 허용
                 .anyRequest().authenticated()
@@ -85,5 +85,15 @@ public class SecurityConfig {
             .userDetailsService(userDetailsService(passwordEncoder))
             .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
+    }
+    
+    // 추가된 부분: 정적 자원 접근을 허용하는 부분
+    @Bean
+    public SecurityFilterChain staticResourcesSecurity(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests()
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
+                .anyRequest().authenticated();
+        return http.build();
     }
 }
