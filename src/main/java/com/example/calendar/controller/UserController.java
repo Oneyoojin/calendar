@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/sample")
+@RequestMapping("/api/calendar")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String redirectToFindUsername2() {
-        return "redirect:/api/sample/find-username2";  // 아이디 찾기 페이지로 리다이렉트
+        return "redirect:/api/calendar/find-username2";  // 아이디 찾기 페이지로 리다이렉트
     }
 
     @GetMapping("/find-username2")
@@ -41,7 +41,7 @@ public class UserController {
 
         if (result.equals("회원가입 성공!")) {
             // ✅ 회원가입 성공 시 success 페이지로 이동하면서 username을 전달
-            return "redirect:/api/sample/success?username=" + userDto.getUsername();
+            return "redirect:/api/calendar/success?username=" + userDto.getUsername();
         } else {
             model.addAttribute("error", result); // 실패 시 에러 메시지를 모델에 추가
             return "find-username2"; // 다시 아이디 찾기 페이지로 이동하여 에러 표시

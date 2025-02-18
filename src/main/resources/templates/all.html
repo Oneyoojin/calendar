@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calender</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>For All</h1>
+  <div class="header">
+    <div class="logo">
+      <span>Calender</span>
+    </div>
+    <div class="nav-buttons">
+      <button th:text="'할 일'">할 일</button>
+      <button th:text="'캘린더'" class="active">캘린더</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="sidebar">
+      <h3 th:text="'만들기'">만들기</h3>
+      <div class="task-filter">
+        <label th:text="'모든 할 일'">모든 할 일</label>
+        <div class="radio-group">
+          <input type="radio" id="all" name="task" checked>
+          <label for="all" th:text="'모든 할 일'">모든 할 일</label>
+          <input type="radio" id="important" name="task">
+          <label for="important" th:text="'중요한 할 일'">중요한 할 일</label>
+        </div>
+      </div>
+      <button th:text="'새 목록 만들기'">새 목록 만들기</button>
+    </div>
+
+    <div class="task-section">
+      <h3 th:text="'할 일을 추가해주세요.'">할 일을 추가해주세요.</h3>
+      <p th:text="'새로운 할 일을 추가하고 관리하세요.'">새로운 할 일을 추가하고 관리하세요.</p>
+      <div class="task">
+        <p class="important" th:text="'- 중요한 할 일'">- 중요한 할 일</p>
+      </div>
+      <button th:text="'새 할 일 만들기'">새 할 일 만들기</button>
+    </div>
+  </div>
 </body>
 </html>

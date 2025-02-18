@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // "다음" 버튼 클릭 시 이동
     nextButton.addEventListener("click", () => {
         if (!nextButton.disabled) {
-            window.location.href = "/api/sample/find-username2";
+            window.location.href = "/api/calendar/find-username2";
         }
     });
 });

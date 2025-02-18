@@ -20,36 +20,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/api/sample/**")  // ✅ 보안 적용 URL을 /api/sample/** 경로로 한정
             .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/sample/register", "/api/sample/find-username2").permitAll()
-                .requestMatchers("/api/sample/find-username3", "/api/sample/process-find-username").permitAll()  // ✅ 추가된 허용 경로
-                .requestMatchers("/api/sample/login").permitAll()  
-                .requestMatchers("/error").permitAll()  // ✅ 에러 페이지 접근 허용
-                .requestMatchers("/api/sample/all").permitAll()
-                .requestMatchers("/api/sample/member").authenticated()
-                .requestMatchers("/api/sample/admin").hasRole("ADMIN")
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // ✅ 정적 리소스 허용
-                .requestMatchers("/success.html").permitAll() // ✅ success.html 페이지 접근 허용
-                .requestMatchers("/api/sample/success").permitAll() // ✅ /api/sample/success 경로 허용
+            .authorizeRequests(auth -> auth
+                .requestMatchers("/api/calendar/register", "/api/calendar/find-username2").permitAll()
+                .requestMatchers("/api/calendar/find-username3", "/api/calendar/process-find-username").permitAll()  // 추가된 허용 경로
+                .requestMatchers("/api/calendar/login").permitAll()
+                .requestMatchers("/error").permitAll()  // 에러 페이지 접근 허용
+                .requestMatchers("/api/calendar/all").permitAll()
+                .requestMatchers("/api/calendar/member").authenticated()
+                .requestMatchers("/api/calendar/admin").hasRole("ADMIN")
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
+                .requestMatchers("/success.html").permitAll()  // success.html 페이지 접근 허용
+                .requestMatchers("/api/calendar/success").permitAll()  // /api/calendar/success 경로 허용
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
-                .loginPage("/api/sample/login")  
+                .loginPage("/api/calendar/login")  // 로그인 페이지 수정
                 .loginProcessingUrl("/login")  
-                .defaultSuccessUrl("/api/sample/member", true)
-                .failureUrl("/api/sample/login?error=true")  
+                .defaultSuccessUrl("/api/calendar/member", true)
+                .failureUrl("/api/calendar/login?error=true")  
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
-                .loginPage("/api/sample/login")  
-                .defaultSuccessUrl("/api/sample/member", true)  
+                .loginPage("/api/calendar/login")  // OAuth2 로그인 페이지 수정
+                .defaultSuccessUrl("/api/calendar/member", true)  
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")  
-                .logoutSuccessUrl("/api/sample/login?logout=true")  
+                .logoutSuccessUrl("/api/calendar/login?logout=true")  
                 .invalidateHttpSession(true)  
                 .clearAuthentication(true)  
                 .permitAll()
@@ -85,15 +84,5 @@ public class SecurityConfig {
             .userDetailsService(userDetailsService(passwordEncoder))
             .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
-    }
-    
-    // 추가된 부분: 정적 자원 접근을 허용하는 부분
-    @Bean
-    public SecurityFilterChain staticResourcesSecurity(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests()
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
-                .anyRequest().authenticated();
-        return http.build();
     }
 }
