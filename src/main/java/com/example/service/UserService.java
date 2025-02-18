@@ -42,21 +42,24 @@ public class UserService {
             return "이미 가입된 아이디입니다.";
         }
 
-        // 4️⃣ 이메일 중복 검사 (이메일이 입력된 경우에만)
-        if (userDto.getEmail() != null && !userDto.getEmail().isEmpty()) {
-            Optional<Users> existingEmail = usersRepository.findByEmail(userDto.getEmail());
-            if (existingEmail.isPresent()) {
-                return "이미 가입된 이메일입니다.";
-            }
+        // 4️⃣ 이메일 필수 체크
+        if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
+            return "이메일을 입력해주세요.";
         }
 
-        // 5️⃣ 생년월일 검증
+        // 5️⃣ 이메일 중복 검사
+        Optional<Users> existingEmail = usersRepository.findByEmail(userDto.getEmail());
+        if (existingEmail.isPresent()) {
+            return "이미 가입된 이메일입니다.";
+        }
+
+        // 6️⃣ 생년월일 검증
         LocalDate birthdate = userDto.getBirthdate();
         if (birthdate == null) {
             return "생년월일을 입력해주세요.";
         }
 
-        // 6️⃣ 성별 변환 (String → Enum)
+        // 7️⃣ 성별 변환 (String → Enum)
         Gender gender;
         try {
             gender = Gender.valueOf(userDto.getGender().toUpperCase());
@@ -64,18 +67,18 @@ public class UserService {
             return "올바르지 않은 성별 값입니다. (남성, 여성, 기타 중 선택)";
         }
 
-        // 7️⃣ 사용자 저장
+        // 8️⃣ 사용자 저장
         Users user = Users.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword())) // 비밀번호 암호화
-                .email(userDto.getEmail() != null && !userDto.getEmail().isEmpty() ? userDto.getEmail() : null) // 이메일이 비어 있으면 null로 설정
+                .email(userDto.getEmail()) // 이메일은 반드시 입력되어야 하므로 null 체크가 필요 없음
                 .dateOfBirth(birthdate)
                 .gender(gender)
                 .isDomestic(userDto.isDomestic())
                 .isActive(true) // 기본값 설정
                 .build();
 
-        // 8️⃣ 사용자 저장
+        // 9️⃣ 사용자 저장
         usersRepository.save(user);
         return "회원가입 성공!";
     }

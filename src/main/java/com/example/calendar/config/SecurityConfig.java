@@ -37,7 +37,7 @@ public class SecurityConfig {
             .formLogin(login -> login
                 .loginPage("/api/calendar/login")  // 로그인 페이지 수정
                 .loginProcessingUrl("/login")  
-                .defaultSuccessUrl("/api/calendar/member", true)
+                .defaultSuccessUrl("/api/calendar/all", true)
                 .failureUrl("/api/calendar/login?error=true")  
                 .permitAll()
             )

@@ -18,6 +18,15 @@ public class UserController {
     public String showLoginPage() {
         return "login";  // 로그인 페이지로 이동
     }
+    @GetMapping("/all") // 로그인 하고 첫 메인화면
+    public String showAllPage() {
+        return "all";  // all.html 템플릿을 반환
+    }
+    @GetMapping("/find-username") // 아이디 찾기 들어가기
+    public String findUsernamePage() {
+    return "find-username";  // find-username.html로 이동
+    }
+
 
     @GetMapping("/register")
     public String showRegistrationPage() {

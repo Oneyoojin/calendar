@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class Userdto {
     private String username;
-    private String password;
+    private String password; 
     private String email;
     private LocalDate birthdate;
     private String gender;

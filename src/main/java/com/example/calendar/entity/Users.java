@@ -24,7 +24,7 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
+    @Column(nullable = false, unique = true) // 이메일 필드에 대해 NOT NULL 및 unique 추가
     private String email;
 
     @Column(nullable = false)
