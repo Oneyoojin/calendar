@@ -31,6 +31,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/sample/member").authenticated()
                 .requestMatchers("/api/sample/admin").hasRole("ADMIN")
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/success.html").permitAll() // ✅ success.html 페이지 접근 허용
+                .requestMatchers("/api/sample/success").permitAll() // ✅ /api/sample/success 경로 허용
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login

@@ -3,37 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar Form</title>
+    <title>회원가입</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/find-username2.css}" />
 </head>
 <body class="flex flex-col items-center min-h-screen py-10">
-    
+
     <!-- 로고 -->
     <div class="logo mb-6">
         <img src="/images/icon.png" alt="Calendar Logo" class="w-24">
     </div>
 
-    <!-- 입력 폼 -->
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${error}" class="w-full max-w-lg px-6 mb-4">
+        <p class="text-red-500 text-center font-semibold" th:text="${error}"></p>
+    </div>
+
+    <!-- 회원가입 폼 -->
     <div class="w-full max-w-lg px-6 bg-white p-8 rounded-lg shadow-md">
         <form th:action="@{/api/sample/process-find-username}" method="post">
             
-            <!-- 생년월일, 이름 입력 -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <input type="date" name="birthdate" placeholder="생년월일" required 
-                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <input type="text" name="name" placeholder="이름" required 
+            <!-- 아이디 입력 -->
+            <div class="mb-4">
+                <input type="text" name="username" placeholder="아이디 (최대 8자, 영문+숫자)" required
+                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                       maxlength="8" pattern="^[a-zA-Z0-9]+$">
+            </div>
+
+            <!-- 비밀번호 입력 -->
+            <div class="mb-4">
+                <input type="password" name="password" placeholder="비밀번호 (최대 8자, 영문+숫자)" required
+                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                       maxlength="8" pattern="^[a-zA-Z0-9]+$">
+            </div>
+
+            <!-- 이메일 입력 -->
+            <div class="mb-4">
+                <input type="email" name="email" placeholder="[선택] 이메일 주소"
                        class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
-            <!-- 국적, 성별 입력 -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <select name="nationality" required 
-                        class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="대한민국">내국인</option>
-                    <option value="기타">외국인</option>
-                </select>
-                <select name="gender" required 
+            <!-- 생년월일 입력 -->
+            <div class="mb-4">
+                <input type="date" name="birthdate" required
+                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <!-- 성별 선택 -->
+            <div class="mb-4">
+                <select name="gender" required
                         class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="남성">남성</option>
                     <option value="여성">여성</option>
@@ -41,18 +59,13 @@
                 </select>
             </div>
 
-            <!-- 이메일 입력 -->
+            <!-- 국적 선택 -->
             <div class="mb-4">
-                <input type="email" name="email" placeholder="[선택] 이메일 주소" 
-                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-
-            <!-- 아이디, 비밀번호 입력 -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <input type="text" name="username" placeholder="아이디 입력" required
-                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <input type="password" name="password" placeholder="비밀번호 입력" required
-                       class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <select name="isDomestic" required
+                        class="w-full p-3 text-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="true">내국인</option>
+                    <option value="false">외국인</option>
+                </select>
             </div>
 
             <!-- 이용약관 동의 -->
@@ -64,7 +77,7 @@
             <!-- 제출 버튼 -->
             <button type="submit"
                     class="w-full h-12 bg-blue-500 text-white font-bold rounded-md cursor-pointer hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 transition">
-                다음
+                회원가입
             </button>
         </form>
     </div>
