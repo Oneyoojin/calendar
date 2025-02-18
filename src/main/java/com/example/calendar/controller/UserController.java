@@ -79,4 +79,31 @@ public class UserController {
         model.addAttribute("username", username != null ? username : "사용자 이름 없음");
         return "success";  // success.html 템플릿을 렌더링 (Thymeleaf 템플릿 사용)
     }
+
+    // 비밀번호 찾기 페이지
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage() {
+        return "reset-password";  // reset-password.html 페이지 반환
+    }
+
+    // 비밀번호 찾기 처리
+    @PostMapping("/process-reset-password")
+    public String processResetPassword(@RequestParam String username, Model model) {
+        // 사용자 아이디로 DB 확인
+        boolean userExists = userService.checkUserExistsByUsername(username);
+
+        if (!userExists) {
+            model.addAttribute("error", "아이디를 찾을 수 없습니다.");
+            return "reset-password"; // 아이디가 없으면 다시 비밀번호 찾기 페이지로 돌아감
+        }
+
+        // 아이디가 존재하면 비밀번호 재설정 페이지로 이동
+        return "redirect:/api/calendar/reset-password-success"; // 비밀번호 재설정 성공 페이지로 이동
+    }
+
+    // 비밀번호 재설정 성공 페이지
+    @GetMapping("/reset-password-success")
+    public String showResetPasswordSuccessPage() {
+        return "reset-password-success";  // 비밀번호 재설정 성공 페이지 반환
+    }
 }

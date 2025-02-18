@@ -87,4 +87,40 @@ public class UserService {
             return "일치하는 아이디가 없습니다."; // 일치하는 사용자가 없을 경우
         }
     }
+
+    // 비밀번호 찾기 기능 추가
+    public String findUserByUsername(String username) {
+        // 사용자 아이디로 DB에서 사용자 조회
+        Optional<Users> userOptional = usersRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            // 사용자가 존재하면 해당 아이디에 대한 처리를 반환 (이 예제에서는 바로 성공 메시지를 반환)
+            return "아이디가 확인되었습니다. 비밀번호 재설정 페이지로 이동합니다.";
+        } else {
+            return "아이디를 찾을 수 없습니다."; // 아이디가 없으면 실패 메시지
+        }
+    }
+
+    // 비밀번호 재설정 처리 (예시로 임시 비밀번호 생성 및 이메일로 발송 등 추가 가능)
+    public String resetPassword(String username) {
+        // 여기서 비밀번호 재설정 로직을 추가할 수 있습니다.
+        // 예를 들어, 임시 비밀번호를 생성하여 이메일로 보내는 등의 작업을 추가할 수 있습니다.
+        
+        Optional<Users> userOptional = usersRepository.findByUsername(username);
+        
+        if (userOptional.isPresent()) {
+            Users user = userOptional.get();
+            String newPassword = "newRandomPassword"; // 임시 비밀번호 (랜덤 생성 로직 필요)
+            user.setPassword(passwordEncoder.encode(newPassword)); // 비밀번호 변경
+            usersRepository.save(user);
+            return "비밀번호가 재설정되었습니다. 새 비밀번호로 로그인하세요.";
+        } else {
+            return "아이디를 찾을 수 없습니다."; // 아이디가 없는 경우
+        }
+    }
+
+    // 사용자 아이디 존재 확인 (중복체크용)
+    public boolean checkUserExistsByUsername(String username) {
+        return usersRepository.findByUsername(username).isPresent();
+    }
 }
