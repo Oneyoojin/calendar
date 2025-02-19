@@ -25,15 +25,15 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/calendar/register", 
                     "/api/calendar/find-username", 
-                    "/api/calendar/find-username-result", 
-                    "/api/calendar/find-username2",
-                    "/api/calendar/find-password",  // 🔹 비밀번호 찾기 추가
-                    "/api/calendar/reset-password",  // 🔹 비밀번호 재설정 추가
+                    "/api/calendar/find-username-result",  // 리다이렉트 허용
+                    "/api/calendar/find-username2", 
+                    "/api/calendar/reset-password",  
                     "/api/calendar/login", 
+                    "/api/calendar/process-find-username",
                     "/error", 
                     "/api/calendar/all",
                     "/api/calendar/success"
-                ).permitAll()  // 특정 페이지 및 정적 리소스 허용
+                ).permitAll()  // 로그인 없이 접근 가능한 페이지 설정
                 
                 .requestMatchers("/api/calendar/member").authenticated()  // 회원만 접근 가능
                 .requestMatchers("/api/calendar/admin").hasRole("ADMIN")  // 관리자만 접근 가능
@@ -59,7 +59,9 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)  
                 .clearAuthentication(true)  
                 .permitAll()
-            );
+            )
+            .sessionManagement()
+                .invalidSessionUrl("/api/calendar/login"); // 세션 만료 시 로그인 페이지로 리디렉션
 
         return http.build();
     }
@@ -71,7 +73,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        // InMemoryUserDetailsManager를 이용한 사용자 관리 (실제 DB로 변경 가능)
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user1")
                 .password(passwordEncoder.encode("1111"))
