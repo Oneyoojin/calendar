@@ -4,6 +4,9 @@ import com.example.calendar.dto.Userdto;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Controller;
@@ -32,22 +35,20 @@ public class UserController {
         return "find-username";  // find-username.html로 이동
     }
 
-   // 아이디 찾기 성공 후 결과 페이지로 이동
     @PostMapping("/find-username")
-    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) {
+    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) throws UnsupportedEncodingException {
         LocalDate birthDate = LocalDate.parse(birthdate); // 문자열을 LocalDate로 변환
         String foundUsername = userService.findUsernameByEmailAndBirthdate(email, birthDate);
 
-    if (foundUsername == null || foundUsername.isEmpty()) {
-        model.addAttribute("error", "일치하는 아이디를 찾을 수 없습니다.");
-        return "find-username"; // 실패 시 다시 find-username 페이지로 이동
+        if (foundUsername == null || foundUsername.isEmpty()) {
+            String errorMessage = "일치하는 아이디를 찾을 수 없습니다.";
+            String encodedErrorMessage = URLEncoder.encode(errorMessage, "UTF-8");
+            return "redirect:/api/calendar/success?error=" + encodedErrorMessage;
+        }
+
+        String encodedUsername = URLEncoder.encode(foundUsername, "UTF-8");
+        return "redirect:/api/calendar/success?username=" + encodedUsername;
     }
-
-    model.addAttribute("foundUsername", foundUsername); // 찾은 아이디를 모델에 추가
-    return "find-username-result"; // 템플릿 이름만 반환 (경로가 아닌 이름만)
-}
-
-
 
     @GetMapping("/register")
     public String showRegistrationPage() {
@@ -64,33 +65,33 @@ public class UserController {
         return "find-username2";  // 아이디 찾기 페이지
     }
 
-    @PostMapping("/process-find-username")
-    public String processFindUsername(@ModelAttribute Userdto userDto, Model model) {
-        System.out.println("회원가입 처리 중...");  // 디버깅 로그 추가
-        String result = userService.registerUser(userDto); // UserService의 회원가입 로직 실행
-
-    if (result.equals("회원가입 성공!")) {
-        System.out.println("회원가입 성공, 리디렉션 중...");
-        model.addAttribute("foundUsername", userDto.getUsername());
-        return "find-username-result";  // find-username-result 페이지로 리디렉션 (경로가 아닌 템플릿 이름만 반환)
-    } else {
-        System.out.println("회원가입 실패, 에러 메시지: " + result);
-        model.addAttribute("error", result); // 실패 시 에러 메시지를 모델에 추가
-        return "find-username2"; // 다시 find-username2 페이지로 이동하여 에러 표시
+    @PostMapping("/process-find-username2")
+    public String processFindUsername2(@RequestParam String username, Model model) {
+        // 아이디를 find-username-result.html로 전달
+        model.addAttribute("username", username); // 아이디 전달
+        return "find-username-result"; // 아이디 찾기 결과 페이지로 리디렉션
     }
-}
-
-
 
     @GetMapping("/success")
-    public String showSuccessPage(@RequestParam(name = "username", required = false) String username, Model model) {
-        model.addAttribute("username", username != null ? username : "사용자 이름 없음");
-        return "success";  // success.html 템플릿을 렌더링 (Thymeleaf 템플릿 사용)
+    public String showSuccessPage(@RequestParam(name = "username", required = false) String username,
+                                  @RequestParam(name = "error", required = false) String error,
+                                  Model model) throws UnsupportedEncodingException {
+        if (username != null) {
+            String decodedUsername = URLDecoder.decode(username, "UTF-8");
+            model.addAttribute("username", decodedUsername);
+            model.addAttribute("message", decodedUsername + "님, 지금부터 기능을 사용할 수 있습니다.");
+        } else if (error != null) {
+            String decodedError = URLDecoder.decode(error, "UTF-8");
+            model.addAttribute("error", decodedError);
+        } else {
+            model.addAttribute("username", "사용자 이름 없음");
+        }
+        return "success";
     }
 
     @GetMapping("/reset-password")
     public String showResetPasswordPage() {
-        return "reset-password";  // reset-password.html 페이지 반환
+        return "reset-password";
     }
 
     @PostMapping("/process-reset-password")
@@ -99,14 +100,14 @@ public class UserController {
 
         if (result == null) {
             model.addAttribute("error", "아이디를 찾을 수 없습니다.");
-            return "reset-password"; // 아이디가 없으면 다시 비밀번호 찾기 페이지로 돌아감
+            return "reset-password";
         }
 
-        return "redirect:/api/calendar/reset-password-success"; // 비밀번호 재설정 성공 페이지로 이동
+        return "redirect:/api/calendar/reset-password-success";
     }
 
     @GetMapping("/reset-password-success")
     public String showResetPasswordSuccessPage() {
-        return "reset-password-success";  // 비밀번호 재설정 성공 페이지 반환
+        return "reset-password-success";
     }
 }

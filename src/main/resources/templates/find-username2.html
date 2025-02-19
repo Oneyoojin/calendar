@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/find-username2.css}" />
 </head>
 <body class="flex flex-col items-center min-h-screen py-10">
@@ -21,7 +21,7 @@
 
     <!-- 회원가입 폼 -->
     <div class="w-full max-w-lg px-6 bg-white p-8 rounded-lg shadow-md">
-        <form th:action="@{/api/calendar/process-find-username}" method="post">
+        <form action="/api/calendar/process-find-username2" method="POST">
             
             <!-- 아이디 입력 -->
             <div class="mb-4">

@@ -21,7 +21,7 @@ public class UserService {
 
     public String registerUser(Userdto userDto) {
         // 기존 회원가입 로직
-        if (userDto.getUsername() == null || userDto.getUsername().length() > 8) {
+        if (userDto.getUsername() == null || userDto.getUsername().length() > 9) {
             return "아이디는 최대 8자까지 입력 가능합니다.";
         }
         if (!Pattern.matches("^[a-zA-Z0-9]+$", userDto.getUsername())) {
@@ -123,4 +123,9 @@ public class UserService {
     public boolean checkUserExistsByUsername(String username) {
         return usersRepository.findByUsername(username).isPresent();
     }
+    public boolean checkUserExistsByEmail(String email) {
+        // 이메일로 사용자 검색
+        return usersRepository.findByEmail(email).isPresent();  // 이메일이 존재하면 true 반환
+    }
+    
 }
