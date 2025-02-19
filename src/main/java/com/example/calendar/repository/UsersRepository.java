@@ -13,6 +13,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     // 이메일과 생년월일을 기반으로 사용자 조회
     Optional<Users> findByEmailAndDateOfBirth(String email, LocalDate birthdate);
 
-    // 예시로 findByUsername 메서드가 추가된 상태에서 다른 메서드를 추가할 수 있음
+    // 아이디와 이메일을 기반으로 사용자 조회
     Optional<Users> findByUsernameAndEmail(String username, String email);  // 아이디와 이메일을 기반으로 사용자 조회
 }

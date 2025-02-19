@@ -31,8 +31,8 @@ public class SecurityConfig {
                     "/api/calendar/find-username-result", 
                     "/api/calendar/find-username2", 
                     "/api/calendar/process-find-username2",
-                    "/api/calendar/reset-password",
-                    "/api/calendar/reset-password-success",  
+                    "/api/calendar/reset-password",  // 로그인 없이 접근 가능
+                    "/api/calendar/reset-password-success",  // 로그인 없이 접근 가능
                     "/api/calendar/login", 
                     "/api/calendar/process-find-username",
                     "/error", 
@@ -42,6 +42,7 @@ public class SecurityConfig {
                 
                 .requestMatchers("/api/calendar/member").authenticated()  // 회원만 접근 가능
                 .requestMatchers("/api/calendar/admin").hasRole("ADMIN")  // 관리자만 접근 가능
+                .requestMatchers("/api/calendar/process-reset-password").permitAll()  // 인증 없이 접근 가능
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
                 
                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
