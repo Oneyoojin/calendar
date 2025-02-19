@@ -3,18 +3,18 @@ package com.example.calendar.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +31,8 @@ public class SecurityConfig {
                     "/api/calendar/find-username-result", 
                     "/api/calendar/find-username2", 
                     "/api/calendar/process-find-username2",
-                    "/api/calendar/reset-password",  
+                    "/api/calendar/reset-password",
+                    "/api/calendar/reset-password-success",  
                     "/api/calendar/login", 
                     "/api/calendar/process-find-username",
                     "/error", 
@@ -49,7 +50,6 @@ public class SecurityConfig {
                 .loginPage("/api/calendar/login")  // 로그인 페이지 설정
                 .loginProcessingUrl("/login")  
                 .defaultSuccessUrl("/api/calendar/find-username2", true)  // 로그인 성공 후 리디렉션할 페이지 설정
-                .defaultSuccessUrl("/api/calendar/all", true)  // 로그인 성공 후 리디렉션
                 .failureUrl("/api/calendar/login?error=true")  // 로그인 실패 후 리디렉션
                 .permitAll()
             )
@@ -102,7 +102,8 @@ public class SecurityConfig {
     // 자동 로그인 처리
     public void performAutoLogin(String username, String password) {
         try {
-            Authentication authentication = authenticationManager(null, passwordEncoder()).authenticate(
+            AuthenticationManager authenticationManager = authenticationManager(null, passwordEncoder());
+            Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             );
             SecurityContextHolder.getContext().setAuthentication(authentication); // 인증 정보 세팅

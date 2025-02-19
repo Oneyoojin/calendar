@@ -1,6 +1,5 @@
 package com.example.calendar.controller;
 
-import com.example.calendar.dto.Userdto;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -35,19 +34,19 @@ public class UserController {
         return "find-username";  // find-username.html로 이동
     }
 
+    // 아이디 찾기 성공 후 결과 페이지로 이동하지 않고, 같은 페이지에서 처리
     @PostMapping("/find-username")
-    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) throws UnsupportedEncodingException {
+    public String findUsername(@RequestParam String email, @RequestParam String birthdate, Model model) {
         LocalDate birthDate = LocalDate.parse(birthdate); // 문자열을 LocalDate로 변환
         String foundUsername = userService.findUsernameByEmailAndBirthdate(email, birthDate);
 
         if (foundUsername == null || foundUsername.isEmpty()) {
-            String errorMessage = "일치하는 아이디를 찾을 수 없습니다.";
-            String encodedErrorMessage = URLEncoder.encode(errorMessage, "UTF-8");
-            return "redirect:/api/calendar/success?error=" + encodedErrorMessage;
+            model.addAttribute("error", "일치하는 아이디를 찾을 수 없습니다."); // 에러 메시지를 모델에 추가
+            return "find-username";  // 같은 페이지로 돌아가면서 오류 메시지 표시
         }
 
-        String encodedUsername = URLEncoder.encode(foundUsername, "UTF-8");
-        return "redirect:/api/calendar/success?username=" + encodedUsername;
+        model.addAttribute("username", foundUsername);  // 아이디가 발견되었을 경우 해당 아이디를 모델에 추가
+        return "find-username";  // 찾은 아이디를 페이지에 표시
     }
 
     @GetMapping("/register")
@@ -67,7 +66,6 @@ public class UserController {
 
     @PostMapping("/process-find-username2")
     public String processFindUsername2(@RequestParam String username, Model model) {
-        // 아이디를 find-username-result.html로 전달
         model.addAttribute("username", username); // 아이디 전달
         return "find-username-result"; // 아이디 찾기 결과 페이지로 리디렉션
     }
@@ -91,23 +89,26 @@ public class UserController {
 
     @GetMapping("/reset-password")
     public String showResetPasswordPage() {
-        return "reset-password";
+        return "reset-password";  // 비밀번호 찾기 페이지 반환
     }
 
     @PostMapping("/process-reset-password")
     public String processResetPassword(@RequestParam String username, Model model) {
+        // 이메일을 통해 사용자 찾기
         String result = userService.findUserByUsername(username);
 
+        // 사용자가 존재하지 않으면 에러 메시지 처리
         if (result == null) {
-            model.addAttribute("error", "아이디를 찾을 수 없습니다.");
-            return "reset-password";
+            model.addAttribute("error", "아이디를 찾을 수 없습니다.");  // 오류 메시지를 모델에 추가
+            return "reset-password";  // 비밀번호 찾기 페이지로 다시 돌아가기
         }
 
-        return "redirect:/api/calendar/reset-password-success";
+        // 비밀번호 재설정 성공 처리 (비밀번호 재설정 절차에 따라 수정 가능)
+        return "redirect:/api/calendar/reset-password-success";  // 비밀번호 재설정 성공 페이지로 이동
     }
 
     @GetMapping("/reset-password-success")
     public String showResetPasswordSuccessPage() {
-        return "reset-password-success";
+        return "reset-password-success";  // 비밀번호 재설정 성공 페이지 반환
     }
 }
