@@ -97,6 +97,9 @@ public class UserService {
             return "아이디를 찾을 수 없습니다.";
         }
     }
+    public boolean isExistByUsername(String username) {
+        return usersRepository.findByUsername(username).isPresent();
+    }
 
     // 비밀번호 재설정 처리
     public String resetPassword(String username) {

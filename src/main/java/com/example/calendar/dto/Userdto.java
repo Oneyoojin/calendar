@@ -4,6 +4,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+import com.example.calendar.entity.Users;
+
 @Getter
 @Setter
 @NoArgsConstructor
