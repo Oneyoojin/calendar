@@ -36,8 +36,10 @@ public class SecurityConfig {
                     "/api/calendar/login", 
                     "/api/calendar/process-find-username",
                     "/error", 
+                    "/api/reset-pw-success",
                     "/api/calendar/all",
                     "/api/calendar/success",
+                    "/api/calendar/reset-pw-success",
                     "/api/calendar/resetPasswordPage-success" // 추가된 설정
                 ).permitAll()  // 로그인 없이 접근 가능한 페이지 설정
                 

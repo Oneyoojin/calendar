@@ -4,14 +4,11 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-import com.example.calendar.entity.Users;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Userdto {
     private String username;
     private String password; 

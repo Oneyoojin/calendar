@@ -3,14 +3,15 @@ package com.example.calendar.controller;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.time.LocalDate;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.time.LocalDate;
+import java.util.Map;
 
 @Log4j2
 @Controller
@@ -110,7 +111,7 @@ public class UserController {
             } else {
                 // 아이디가 존재하면 그 아이디를 모델에 추가
                 model.addAttribute("username", username);
-                // 아이디가 존재하면 비밀번호 재설정 성공 페이지로 리다이렉트
+                // 아이디가 존재하면 비밀번호 재설정 성공 페이지로 리디렉트
                 return "redirect:/api/calendar/resetPasswordPage-success?username=" + username;
             }
         }
@@ -120,16 +121,16 @@ public class UserController {
     // 비밀번호 재설정 처리 (POST 요청)
     @PostMapping("/resetPasswordPage")  // POST 요청 처리
     public String processResetPasswordPage(@RequestParam String username, Model model) {
-        if (userService.isExistByUsername(username)) {
+        // 아이디 존재 여부 체크: 아이디가 없다면 error 메시지 출력
+        if (!userService.isExistByUsername(username)) {
             model.addAttribute("error", "아이디를 찾을 수 없습니다.");
-            return "resetPasswordPage";  // 아이디가 없다면 다시 같은 페이지로
+            return "resetPasswordPage";  // 아이디가 없으면 다시 같은 페이지로
         }
 
         // 아이디가 존재한다면 비밀번호 재설정 성공 페이지로 리디렉션
         model.addAttribute("username", username);
         return "redirect:/api/calendar/resetPasswordPage-success?username=" + username;  
     }
-
 
     // 비밀번호 재설정 처리 (GET 요청)
     @GetMapping("/resetPasswordPage-success")
@@ -155,16 +156,28 @@ public class UserController {
             return "reset-password-success";  // 비밀번호 확인이 일치하지 않으면 다시 페이지로 돌아감
         }
 
+        // 사용자 존재 여부 확인
+        if (!userService.isExistByUsername(username)) {
+            model.addAttribute("error", "없는 아이디입니다.");
+            return "reset-password-success";  // 아이디가 존재하지 않으면 오류 메시지 표시
+        }
+
         // 비밀번호 업데이트 서비스 호출
-        boolean isUpdated = userService.updatePassword(username, null, newPassword);
+        boolean isUpdated = userService.updatePassword(username, newPassword);
 
         if (isUpdated) {
             model.addAttribute("message", "비밀번호가 재설정되었습니다. 새 비밀번호로 로그인하세요.");
+            return "redirect:/api/calendar/reset-pw-success"; // 비밀번호 재설정 후 성공 페이지로 리디렉션
         } else {
             model.addAttribute("error", "아이디 또는 이메일을 확인하세요.");
+            return "reset-password-success";  // 업데이트 실패 시 오류 메시지 표시
         }
+    }
 
-        return "reset-password-success"; // 비밀번호 재설정 후 성공 메시지 반환
+    // 비밀번호 변경 성공 페이지
+    @GetMapping("/reset-pw-success")
+    public String showResetPasswordSuccess() {
+        return "reset-pw-success";  // 비밀번호 변경 성공 페이지로 이동
     }
 
     // reset-password 페이지로 이동
@@ -172,5 +185,20 @@ public class UserController {
     public String showResetPasswordPage() {
         return "resetPasswordPage";  // resetPasswordPage.html로 이동
     }
-    
+
+   // 비밀번호 변경 처리 (username을 사용하여 비밀번호 변경)
+    @PostMapping("/reset-password")
+    public String handleResetPassword(@RequestParam String username, 
+                                  @RequestParam String newPassword, 
+                                  Model model) {
+        boolean isUpdated = userService.updatePassword(username, newPassword);
+        
+        if (isUpdated) {
+            model.addAttribute("message", "비밀번호가 성공적으로 재설정되었습니다.");
+            return "redirect:/login?resetSuccess";  // 비밀번호 재설정 성공 시 로그인 페이지로 리디렉션
+        } else {
+            model.addAttribute("error", "아이디를 확인하거나 비밀번호 변경에 실패했습니다.");
+            return "redirect:/reset-password?error";  // 실패 시 에러 페이지로 리디렉션
+        }
+    }
 }
