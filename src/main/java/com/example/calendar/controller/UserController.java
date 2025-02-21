@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.LocalDate;
-import java.util.Map;
 
 @Log4j2
 @Controller
@@ -186,7 +185,7 @@ public class UserController {
         return "resetPasswordPage";  // resetPasswordPage.html로 이동
     }
 
-   // 비밀번호 변경 처리 (username을 사용하여 비밀번호 변경)
+    // 비밀번호 변경 처리 (username을 사용하여 비밀번호 변경)
     @PostMapping("/reset-password")
     public String handleResetPassword(@RequestParam String username, 
                                   @RequestParam String newPassword, 

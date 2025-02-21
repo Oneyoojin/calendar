@@ -111,31 +111,32 @@ public class UserService {
 
     // 비밀번호 재설정 처리 (서비스에서 비밀번호 변경)
     @Transactional
-public boolean updatePassword(String username, String newPassword) {
-    // 비밀번호 유효성 검사
-    if (!isValidPassword(newPassword)) {
-        return false;  // 비밀번호가 유효하지 않으면 false 반환
-    }
-
-    // 사용자 조회
-    Optional<Users> userOptional = usersRepository.findByUsername(username);
-    if (userOptional.isPresent()) {
-        Users user = userOptional.get();
-
-        // 비밀번호만 업데이트 (이메일은 null로 설정되지 않도록 처리)
-        user.setPassword(passwordEncoder.encode(newPassword));
-
-        // 이메일이 null 또는 빈 문자열인 경우 기본값 설정
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            user.setEmail("default@example.com");  // 기본 이메일을 설정
+    public boolean updatePassword(String username, String newPassword) {
+        // 비밀번호 유효성 검사
+        if (!isValidPassword(newPassword)) {
+            return false;  // 비밀번호가 유효하지 않으면 false 반환
         }
 
-        // 사용자 정보 저장
-        usersRepository.save(user);
-        return true;  // 비밀번호 업데이트 성공
-    }
+        // 사용자 조회
+        Optional<Users> userOptional = usersRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            Users user = userOptional.get();
 
-    return false;  // 사용자 정보가 없으면 false 반환
+            // 비밀번호만 업데이트 (이메일 관련 처리는 제거)
+            user.setPassword(passwordEncoder.encode(newPassword));
+
+            // 이메일이 null일 경우, 고유한 기본 이메일을 설정 (null 값을 방지)
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                String uniqueEmail = user.getUsername() + System.currentTimeMillis() + "@example.com"; // 고유한 이메일 생성
+                user.setEmail(uniqueEmail);  // 고유한 이메일을 설정
+            }
+
+            // 사용자 정보 저장
+            usersRepository.save(user);
+            return true;  // 비밀번호 업데이트 성공
+        }
+
+        return false;  // 사용자 정보가 없으면 false 반환
     }
 
     // 비밀번호 유효성 검사
