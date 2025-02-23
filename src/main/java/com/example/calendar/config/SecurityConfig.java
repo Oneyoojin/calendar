@@ -31,8 +31,8 @@ public class SecurityConfig {
                     "/api/calendar/find-username-result", 
                     "/api/calendar/find-username2", 
                     "/api/calendar/process-find-username2",
-                    "/api/calendar/resetPasswordPage",  // 변경된 URL 허용
-                    "/api/calendar/reset-password-success",  // 로그인 없이 접근 가능
+                    "/api/calendar/resetPasswordPage",
+                    "/api/calendar/reset-password-success",
                     "/api/calendar/login", 
                     "/api/calendar/process-find-username",
                     "/error", 
@@ -40,12 +40,11 @@ public class SecurityConfig {
                     "/api/calendar/all",
                     "/api/calendar/success",
                     "/api/calendar/reset-pw-success",
-                    "/api/calendar/resetPasswordPage-success" // 추가된 설정
+                    "/api/calendar/resetPasswordPage-success"
                 ).permitAll()  // 로그인 없이 접근 가능한 페이지 설정
                 
-                .requestMatchers("/api/calendar/member").authenticated()  // 회원만 접근 가능
+                .requestMatchers("/api/calendar/member").authenticated()  // 로그인한 회원만 접근 가능
                 .requestMatchers("/api/calendar/admin").hasRole("ADMIN")  // 관리자만 접근 가능
-                .requestMatchers("/api/calendar/resetPasswordPage-success").permitAll()  // 인증 없이 접근 가능
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()  // 정적 리소스 허용
                 
                 .anyRequest().authenticated()  // 그 외의 요청은 인증 필요
@@ -53,18 +52,18 @@ public class SecurityConfig {
             .formLogin(login -> login
                 .loginPage("/api/calendar/login")  // 로그인 페이지 설정
                 .loginProcessingUrl("/login")  
-                .defaultSuccessUrl("/api/calendar/find-username2", true)  // 로그인 성공 후 리디렉션
+                .defaultSuccessUrl("/api/calendar/member", true)  // 로그인 성공 후 member 페이지로 리디렉션
                 .failureUrl("/api/calendar/login?error=true")  // 로그인 실패 시 리디렉션
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
                 .loginPage("/api/calendar/login")  // OAuth2 로그인 페이지 설정
-                .defaultSuccessUrl("/api/calendar/member", true)  // OAuth2 로그인 성공 후 리디렉션
+                .defaultSuccessUrl("/api/calendar/member", true)  // OAuth2 로그인 성공 후 member 페이지로 리디렉션
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")  
-                .logoutSuccessUrl("/api/calendar/login?logout=true")  // 로그아웃 후 리디렉션
+                .logoutSuccessUrl("/api/calendar/login?logout=true")  // 로그아웃 후 로그인 페이지로 리디렉션
                 .invalidateHttpSession(true)  
                 .clearAuthentication(true)  
                 .permitAll()

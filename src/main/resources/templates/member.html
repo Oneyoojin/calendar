@@ -1,33 +1,38 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calender</title>
-    <link rel="stylesheet" href="/static/css/member.css?v=1.0">
-    <script src="/static/js/member.js"></script>
+    <title>Calendar Tasks</title>
+    <link rel="stylesheet" th:href="@{/css/member.css}">
 </head>
 <body>
     <div class="sidebar">
-        <h2 class="title">Calender</h2>
-        <a href="#" class="button" onclick="addTask()">만들기</a>
-        <ul class="menu">
-            <li>모든 할 일</li>
-            <li>중요한 할 일</li>
-            <li>새 목록 만들기</li>
+        <h2><img src="@{/images/icon.png}" alt="Calendar Icon" class="logo"></h2>
+        <button class="create-btn">+ 만들기</button>
+        <ul class="task-lists">
+            <li class="active">✔ 모든 할 일</li>
+            <li> ⭐ 별표 표시됨</li>
+            <li> 📋 내 할 일 목록1</li>
+            <li> 📋 내 할 일 목록2</li>
+            <li> ➕ 새 목록 만들기</li>
         </ul>
     </div>
-    <div class="main">
-        <div class="header">
-            <div class="tabs">
-                <button class="tab active">할 일</button>
-                <button class="tab">캘린더</button>
+    <div class="main-content">
+        <div class="task-board">
+            <div class="task-card">
+                <h3>내 할 일 목록1</h3>
+                <a href="#" class="add-task">➕ 할 일 추가</a>
+                <p>📌 알림 <span class="alert">1주 전</span></p>
+                <p class="completed">✔ 완료됨 (3개)</p>
             </div>
-            <div class="calendar-icon">
-                <img src="/static/images/icon.png" alt="캘린더 아이콘">
+            <div class="task-card">
+                <h3>내 할 일 목록2</h3>
+                <a href="#" class="add-task">➕ 할 일 추가</a>
+                <p class="empty">아직 할 일 없음</p>
+                <p class="description">할 일을 추가하고 관리하세요.</p>
             </div>
         </div>
-        <div class="content">할 일을 추가해주세요.</div>
     </div>
 </body>
 </html>
