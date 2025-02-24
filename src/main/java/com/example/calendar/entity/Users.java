@@ -46,8 +46,15 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)  // 역할을 ENUM으로 정의
+    private Role role;
+
     public enum Gender {
         남성, 여성, 기타
+    }
+
+    public enum Role {
+        USER, ADMIN
     }
 
     @PrePersist
