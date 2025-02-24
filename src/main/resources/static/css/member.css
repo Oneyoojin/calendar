@@ -1,4 +1,4 @@
-/* styles.css - Google Calendar Task 스타일 적용 */
+/* member.css - Google Calendar Task 스타일 적용 */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
@@ -9,13 +9,13 @@ body {
 }
 
 .logo {
-    position: absolute;
+    position: relative;
     top: 10px;
     left: 10px;
 }
 
 .logo img {
-    width: 100px;
+    width: 40px;
     height: auto;
     object-fit: contain;
 }
@@ -25,6 +25,9 @@ body {
     background: white;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .sidebar h2 {
@@ -32,16 +35,20 @@ body {
     font-size: 18px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
-.calendar-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
+.sidebar-content {
+    margin-top: 20mm;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .create-btn {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     background: #007bff;
     color: white;
@@ -54,6 +61,8 @@ body {
 .task-lists {
     list-style: none;
     padding: 0;
+    width: 100%;
+    text-align: center;
 }
 
 .task-lists li {
@@ -61,6 +70,7 @@ body {
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .task-lists .active {

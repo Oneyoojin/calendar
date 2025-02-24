@@ -8,15 +8,19 @@
 </head>
 <body>
     <div class="sidebar">
-        <h2><img src="@{/images/icon.png}" alt="Calendar Icon" class="logo"></h2>
-        <button class="create-btn">+ 만들기</button>
-        <ul class="task-lists">
-            <li class="active">✔ 모든 할 일</li>
-            <li> ⭐ 별표 표시됨</li>
-            <li> 📋 내 할 일 목록1</li>
-            <li> 📋 내 할 일 목록2</li>
-            <li> ➕ 새 목록 만들기</li>
-        </ul>
+        <h2>
+            <img th:src="@{/images/icon.png}" alt="Calendar Icon" class="logo" style="width: 180px; height: auto;"> 
+        </h2>
+        <div class="sidebar-content"> 
+            <button class="create-btn">+ 만들기</button>
+            <ul class="task-lists">
+                <li class="active">✔ 모든 할 일</li>
+                <li> ⭐ 별표 표시됨</li>
+                <li> 📋 내 할 일 목록1</li>
+                <li> 📋 내 할 일 목록2</li>
+                <li> ➕ 새 목록 만들기</li>
+            </ul>
+        </div>
     </div>
     <div class="main-content">
         <div class="task-board">
