@@ -97,6 +97,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    position: relative;
 }
 
 .task-card h3 {
@@ -133,6 +134,7 @@ body {
     font-size: 12px;
     color: #555;
 }
+
 /* 오른쪽 상단 버튼 스타일 */
 .top-right-buttons {
     position: absolute;
@@ -169,16 +171,8 @@ body {
     height: 24px;
     cursor: pointer;
 }
-/* 오른쪽 상단 버튼 스타일 */
-.top-right-buttons {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-/* 점 6개 (3x3) 스타일 - 2mm 위로 이동 */
+
+/* 점 6개 세로 배치 (변경 없음) */
 .dot-menu {
     display: grid;
     grid-template-columns: repeat(3, 5px);
@@ -198,6 +192,7 @@ body {
     background-color: #333;
     border-radius: 50%;
 }
+
 /* 모달 스타일 */
 .modal {
     display: none;
@@ -311,4 +306,26 @@ body {
         flex-direction: column; /* 작은 화면에서는 세로 정렬 */
         align-items: stretch;
     }
+}
+
+/* 카드 안에서 점 3개 메뉴 아이콘 */
+.task-card .dot-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.task-card .dot-menu .dot-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain; /* 이미지 변형 없이 원본 비율 유지 */
+}
+
+/* 설명 영역 */
+.description {
+    font-size: 12px;
+    color: #555;
 }

@@ -56,6 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         taskCard.innerHTML = `
             <h3>${title}</h3>
+            <div class="dot-menu">
+                <img src="/images/free-icon-three-dot-menu-17399989.png" alt="점 3개 아이콘" class="dot-icon">
+            </div>
             <a href="#" class="add-task">➕ 할 일 추가</a>
             <p>📌 알림 <span class="alert">${date} ${time}</span></p>
             <p class="description">${description}</p>

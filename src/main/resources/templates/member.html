@@ -6,7 +6,7 @@
     <title>Calendar Tasks</title>
     <link rel="stylesheet" th:href="@{/css/member.css}">
     <link rel="stylesheet" th:href="@{/css/task-modal.css}">
-    <script th:src="@{/js/member.js}" defer></script>
+    <script th:src="@{/js/task-modal.js}" defer></script>
 </head>
 <body>
 
@@ -20,7 +20,7 @@
                 <img th:src="@{/images/free-icon-check-1292834.png}" style="width: 20px; height: auto;">
             </button>
         </div>
-        <!-- 점 6개 메뉴 아이콘 -->
+        <!-- 점 6개 메뉴 아이콘 (이 부분은 동적으로 생성되므로 변경 없이 유지) -->
         <div class="dot-menu">
             <span></span><span></span><span></span>
             <span></span><span></span><span></span>
@@ -37,7 +37,7 @@
             <ul class="task-lists">
                 <li class="active">✔ 모든 할 일</li>
                 <li> ⭐ 별표 표시됨</li>
-                <li id="today-tasks"> 📋 오늘의 할 일</li> <!-- 새로운 할 일이 추가될 영역 -->
+                <li id="today-tasks"> 오늘의 할 일</li> <!-- 새로운 할 일이 추가될 영역 -->
                 <li> ➕ 새 목록 만들기</li>
             </ul>
         </div>
@@ -86,6 +86,5 @@
         </div>
     </div>
 
-    <script th:src="@{/js/task-modal.js}" defer></script>
 </body>
 </html>
