@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PasswordCheckExample {
     public static void main(String[] args) {
         // 암호화된 비밀번호
-        String encryptedPassword = "$2a$10$K2Wlkj8pJ2aqdraFfSJ3.en5kmFWVz783OPB1Mvvttzzv5plqvGpa";
+        String encryptedPassword = "$2a$10$6txWUTJAtOyU5WuFCuBfOuQH3HRMTYbMk0YRg/ggrECmSecn5fKd2";
         
         // 사용자가 입력한 비밀번호 (예: "user1Password")
         String inputPassword = "user12"; 
