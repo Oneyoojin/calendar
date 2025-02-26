@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const taskBoard = document.getElementById("taskBoard");
     let taskMenuModal = document.getElementById("taskMenuModal");
     let firstTaskCard = null; // ✅ 첫 번째 카드 추적
+    let sortAscending = true; // ✅ 기본 정렬은 오름차순
+    const taskModal = document.getElementById("taskModal"); // ✅ 모달 요소 가져오기
 
     // ✅ taskMenuModal이 없으면 동적으로 생성하여 추가
     if (!taskMenuModal) {
@@ -21,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         taskMenuModal.innerHTML = `
             <ul class="task-menu">
                 <li class="selected">✔ 내가 정렬한 대로</li>
-                <li>날짜</li>
-                <li>최근 별표표시한 항목</li>
                 <hr>
                 <li>목록 이름 변경</li>
                 <li class="disabled">목록 삭제 <span>기본 목록은 삭제할 수 없음</span></li>
@@ -33,8 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </ul>
         `;
         document.body.appendChild(taskMenuModal);
-    } else {
-        console.log("✅ taskMenuModal이 정상적으로 존재합니다.");
     }
 
     // ✅ 점 3개 클릭 시 메뉴 표시
@@ -49,10 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
             taskMenuModal.style.display = "block";
             taskMenuModal.style.opacity = "1";
             taskMenuModal.style.transform = "scale(1)";
-
-            console.log("✅ 점 3개 클릭됨, 모달 위치 조정 완료");
         } else {
-            // ✅ 외부 클릭 시 메뉴 닫기
             if (!taskMenuModal.contains(event.target)) {
                 taskMenuModal.style.opacity = "0";
                 taskMenuModal.style.transform = "scale(0.95)";
@@ -82,23 +77,35 @@ document.addEventListener("DOMContentLoaded", function () {
             // ✅ 첫 번째 "만들기" 클릭 시, 제목만 있는 카드 생성
             firstTaskCard = document.createElement("div");
             firstTaskCard.classList.add("task-card");
-            firstTaskCard.dataset.hasContent = "true"; // ✅ 내용이 있는 카드로 설정
+            firstTaskCard.dataset.hasContent = "true";
+            firstTaskCard.style.position = "relative";
+
             firstTaskCard.innerHTML = `
                 <h3>${title}</h3>
                 <ul class="task-list"></ul> <!-- ✅ 리스트가 추가될 영역 -->
-                <div class="dot-menu">
+                <div class="sort-buttons" style="position: absolute; top: 10px; right: 50px;">
+                    <img src="/images/—Pngtree—up and down arrow number_4706662.png" class="sort-icon" 
+                         style="width: 24px; cursor: pointer;">
+                </div>
+                <div class="dot-menu" style="position: absolute; top: 10px; right: 10px;">
                     <img src="/images/free-icon-three-dot-menu-17399989.png" class="dot-icon">
                 </div>
             `;
             taskBoard.appendChild(firstTaskCard);
 
-            // ✅ 점 3개 메뉴 클릭 이벤트 추가
+            addSortEvent(firstTaskCard);
             addDotMenuEvent(firstTaskCard);
 
             console.log("✅ 첫 번째 카드 생성 완료 (알림 없음):", firstTaskCard);
         } else {
             // ✅ 두 번째 이후 "만들기" 클릭 시, 첫 번째 카드 아래에 리스트 추가
-            const taskList = firstTaskCard.querySelector(".task-list");
+            let taskList = firstTaskCard.querySelector(".task-list");
+            if (!taskList) {
+                taskList = document.createElement("ul");
+                taskList.classList.add("task-list");
+                firstTaskCard.appendChild(taskList);
+            }
+
             const newTaskItem = document.createElement("li");
             newTaskItem.classList.add("task-item");
             newTaskItem.innerHTML = `
@@ -110,17 +117,55 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
             taskList.appendChild(newTaskItem);
 
-            // ✅ 점 3개 메뉴 클릭 이벤트 추가
             addDotMenuEvent(newTaskItem);
-
-            console.log("✅ 기존 카드 아래에 새로운 할 일 추가 완료:", newTaskItem);
         }
 
-        // ✅ 모달 닫기 및 입력값 초기화
-        document.getElementById("taskModal").style.display = "none";
+        closeModal(); // ✅ 모달 닫기 추가
+    };
+
+    // ✅ 모달 닫기 함수
+    function closeModal() {
+        console.log("✅ 모달 닫기 실행됨");
+        if (!taskModal) {
+            console.error("❌ 모달 요소를 찾을 수 없음");
+            return;
+        }
+
+        taskModal.style.display = "none"; // ✅ 모달 숨김
         document.getElementById("taskTitle").value = "";
         document.getElementById("taskDescription").value = "";
-    };
+    }
+
+    // ✅ 정렬 기능 추가 함수
+    function addSortEvent(taskCard) {
+        const sortIcon = taskCard.querySelector(".sort-icon");
+        if (sortIcon) {
+            sortIcon.addEventListener("click", () => {
+                sortAscending = !sortAscending; // ✅ 클릭 시 방향 전환
+                sortTaskList(sortAscending);
+            });
+        }
+    }
+
+    // ✅ 리스트 정렬 함수
+    function sortTaskList(ascending) {
+        if (!firstTaskCard) return;
+
+        const taskList = firstTaskCard.querySelector(".task-list");
+        if (!taskList) return;
+
+        const tasks = Array.from(taskList.children);
+
+        tasks.sort((a, b) => {
+            const titleA = a.querySelector("h3").textContent.toLowerCase();
+            const titleB = b.querySelector("h3").textContent.toLowerCase();
+            return ascending ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
+        });
+
+        tasks.forEach(task => taskList.appendChild(task));
+
+        console.log(ascending ? "✅ 오름차순 정렬 완료" : "✅ 내림차순 정렬 완료");
+    }
 
     // ✅ 점 3개 버튼 이벤트 핸들러 추가 함수
     function addDotMenuEvent(taskElement) {
@@ -134,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 taskMenuModal.style.display = "block";
                 taskMenuModal.style.opacity = "1";
                 taskMenuModal.style.transform = "scale(1)";
-                console.log("✅ 점 3개 클릭됨, 모달 위치 조정 완료 (동적 추가)");
             });
         }
     }
