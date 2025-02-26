@@ -23,7 +23,6 @@
                 <img th:src="@{/images/free-icon-check-1292834.png}" style="width: 20px; height: auto;">
             </button>
         </div>
-        <!-- 점 6개 메뉴 아이콘 -->
         <img th:src="@{/images/free-icon-menu-1237932.png}" style="width: 20px; height: auto;">
     </div>
 
@@ -118,14 +117,13 @@
                     taskMenuModal.style.left = `${rect.left}px`;
                     taskMenuModal.style.display = "block";
                 } else {
-                    // ✅ 외부 클릭 시 메뉴 닫기
                     if (!taskMenuModal.contains(event.target)) {
                         taskMenuModal.style.display = "none";
                     }
                 }
             });
 
-            // ✅ 카드 추가 기능
+            // ✅ 카드 추가 기능 (이미지 포함)
             window.saveTask = function () {
                 const title = document.getElementById("taskTitle").value.trim();
                 if (!title) {
@@ -142,6 +140,10 @@
                     </div>
                     <p>📌 알림: ${document.getElementById("taskDate").value}</p>
                     <p class="description">${document.getElementById("taskDescription").value}</p>
+                    <img src="/images/Pngtree-up-down-arrow-number_4706662.png" 
+                         alt="Up Down Arrows" 
+                         class="up-down-icon"
+                         style="width: 20px; height: auto;">
                 `;
 
                 taskBoard.appendChild(newTask);

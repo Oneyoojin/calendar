@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         taskMenuModal.style.transition = "opacity 0.3s ease, transform 0.2s ease";
         taskMenuModal.innerHTML = `
             <ul class="task-menu">
-                <li class="selected">✔ 내가 정렬한 대로</li>
+                <li class="selected">내가 정렬한 대로</li>
                 <li>날짜</li>
                 <li>최근 별표표시한 항목</li>
                 <hr>
@@ -89,6 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <p>📌 알림: ${date}</p>
             <p class="description">${description}</p>
+            <div class="dot-menu">
+                <img src="/images/—Pngtree—up and down arrow number_4706662.png" class="arrow-icon" style="position: relative; left: -30px; width: 40px; height: 40px;">
+            </div>
         `;
 
         // ✅ 생성된 카드 `taskBoard`에 추가
