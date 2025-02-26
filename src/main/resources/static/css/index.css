@@ -1,0 +1,75 @@
+/* 점 3개 클릭 시 나타나는 모달 스타일 */
+#taskMenuModal {
+    display: none;
+    position: absolute;
+    z-index: 9999;  /* ✅ 다른 요소 위에 위치 */
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 250px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #333;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ✅ 모달이 활성화될 때 CSS 적용 */
+#taskMenuModal.show {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 메뉴 내부 스타일 */
+.task-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-menu li {
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-menu li:hover {
+    background: #f5f5f5;
+}
+
+/* 비활성화된 메뉴 항목 스타일 */
+.task-menu .disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* 선택된 항목 스타일 */
+.task-menu .selected {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.task-menu .selected::before {
+    content: "✔";
+    margin-right: 10px;
+}
+
+/* 점 3개 아이콘 위치 */
+.dot-menu {
+    position: relative;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot-menu img {
+    width: 20px;
+    height: 20px;
+}

@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.calendar.dto.UserDto;
+import com.example.calendar.dto.Userdto;
 import com.example.calendar.entity.Users;
 import com.example.calendar.entity.Users.Gender;
 import com.example.calendar.repository.UsersRepository;
@@ -20,7 +20,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입 로직
-    public String registerUser(UserDto userDto) {
+    public String registerUser(Userdto userDto) {
         // 아이디 유효성 검사
         if (userDto.getUsername() == null || userDto.getUsername().length() > 9) {
             return "아이디는 최대 8자까지 입력 가능합니다.";

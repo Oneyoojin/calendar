@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class Userdto{
     private String username;
     private String password; 
     private String email;

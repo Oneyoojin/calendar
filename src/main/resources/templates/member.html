@@ -6,7 +6,10 @@
     <title>Calendar Tasks</title>
     <link rel="stylesheet" th:href="@{/css/member.css}">
     <link rel="stylesheet" th:href="@{/css/task-modal.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <script th:src="@{/js/index.js}" defer></script>
     <script th:src="@{/js/task-modal.js}" defer></script>
+    <script th:src="@{/js/member.js}" defer></script>
 </head>
 <body>
 
@@ -20,12 +23,8 @@
                 <img th:src="@{/images/free-icon-check-1292834.png}" style="width: 20px; height: auto;">
             </button>
         </div>
-        <!-- 점 6개 메뉴 아이콘 (이 부분은 동적으로 생성되므로 변경 없이 유지) -->
-        <div class="dot-menu">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-        </div>
+        <!-- 점 6개 메뉴 아이콘 -->
+        <img th:src="@{/images/free-icon-menu-1237932.png}" style="width: 20px; height: auto;">
     </div>
 
     <div class="sidebar">
@@ -37,7 +36,7 @@
             <ul class="task-lists">
                 <li class="active">✔ 모든 할 일</li>
                 <li> ⭐ 별표 표시됨</li>
-                <li id="today-tasks"> 오늘의 할 일</li> <!-- 새로운 할 일이 추가될 영역 -->
+                <li id="today-tasks"> 오늘의 할 일</li>
                 <li> ➕ 새 목록 만들기</li>
             </ul>
         </div>
@@ -47,6 +46,22 @@
         <div id="taskBoard" class="task-board">
             <!-- 동적으로 할 일이 추가될 영역 -->
         </div>
+    </div>
+
+    <!-- ✅ 점 3개 클릭 시 나타나는 정렬 메뉴 -->
+    <div id="taskMenuModal" style="display: none; position: absolute; z-index: 1000; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 8px 0; font-size: 14px; color: #333;">
+        <ul class="task-menu">
+            <li class="selected">✔ 내가 정렬한 대로</li>
+            <li>날짜</li>
+            <li>최근 별표표시한 항목</li>
+            <hr>
+            <li>목록 이름 변경</li>
+            <li class="disabled">목록 삭제 <span>기본 목록은 삭제할 수 없음</span></li>
+            <hr>
+            <li>목록 인쇄</li>
+            <li>완료된 할 일 모두 삭제</li>
+            <li class="disabled">오래된 할 일 정리</li>
+        </ul>
     </div>
 
     <!-- 모달 창 -->
@@ -82,9 +97,69 @@
                 <option>내 할 일 목록2</option>
             </select>
 
-            <button class="save-btn" onclick="saveTask()" disabled>저장</button>
+            <button class="save-btn" onclick="saveTask()">저장</button>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const taskBoard = document.getElementById("taskBoard");
+            const taskMenuModal = document.getElementById("taskMenuModal");
+
+            // ✅ 점 3개 클릭 시 메뉴 표시
+            document.addEventListener("click", function (event) {
+                if (event.target.classList.contains("dot-icon")) {
+                    event.stopPropagation();
+
+                    const dotMenu = event.target.closest(".dot-menu");
+                    const rect = dotMenu.getBoundingClientRect();
+
+                    taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
+                    taskMenuModal.style.left = `${rect.left}px`;
+                    taskMenuModal.style.display = "block";
+                } else {
+                    // ✅ 외부 클릭 시 메뉴 닫기
+                    if (!taskMenuModal.contains(event.target)) {
+                        taskMenuModal.style.display = "none";
+                    }
+                }
+            });
+
+            // ✅ 카드 추가 기능
+            window.saveTask = function () {
+                const title = document.getElementById("taskTitle").value.trim();
+                if (!title) {
+                    alert("제목을 입력하세요!");
+                    return;
+                }
+
+                const newTask = document.createElement("div");
+                newTask.classList.add("task-card");
+                newTask.innerHTML = `
+                    <h3>${title}</h3>
+                    <div class="dot-menu">
+                        <img src="/images/free-icon-three-dot-menu-17399989.png" class="dot-icon">
+                    </div>
+                    <p>📌 알림: ${document.getElementById("taskDate").value}</p>
+                    <p class="description">${document.getElementById("taskDescription").value}</p>
+                `;
+
+                taskBoard.appendChild(newTask);
+                newTask.style.display = "block";
+
+                // ✅ 추가된 카드의 점 3개 이벤트 핸들러
+                newTask.querySelector(".dot-icon").addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    const rect = this.getBoundingClientRect();
+                    taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
+                    taskMenuModal.style.left = `${rect.left}px`;
+                    taskMenuModal.style.display = "block";
+                });
+
+                document.getElementById("taskModal").style.display = "none";
+            };
+        });
+    </script>
 
 </body>
 </html>

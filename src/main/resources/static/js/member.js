@@ -1,80 +1,116 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const taskModal = document.getElementById("taskModal");
     const taskBoard = document.getElementById("taskBoard");
-    const taskTitleInput = document.getElementById("taskTitle");
-    const taskDateInput = document.getElementById("taskDate");
-    const taskTimeInput = document.getElementById("taskTime");
-    const taskDescriptionInput = document.getElementById("taskDescription");
-    const saveButton = document.querySelector(".save-btn");
+    let taskMenuModal = document.getElementById("taskMenuModal");
 
-    // 모달 열기
-    window.openModal = function () {
-        taskModal.style.display = "flex";
-    };
-
-    // 모달 닫기
-    window.closeModal = function () {
-        taskModal.style.display = "none";
-        resetModalFields();
-    };
-
-    // 입력값 초기화
-    function resetModalFields() {
-        taskTitleInput.value = "";
-        taskDateInput.value = "";
-        taskTimeInput.value = "";
-        taskDescriptionInput.value = "";
-        saveButton.setAttribute("disabled", "true");
+    // ✅ taskMenuModal이 없으면 동적으로 생성하여 추가
+    if (!taskMenuModal) {
+        console.warn("⚠️ taskMenuModal 요소가 없음. 동적으로 생성합니다.");
+        taskMenuModal = document.createElement("div");
+        taskMenuModal.id = "taskMenuModal";
+        taskMenuModal.style.display = "none";
+        taskMenuModal.style.position = "absolute";
+        taskMenuModal.style.zIndex = "1000";
+        taskMenuModal.style.background = "white";
+        taskMenuModal.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.2)";
+        taskMenuModal.style.borderRadius = "8px";
+        taskMenuModal.style.padding = "10px";
+        taskMenuModal.style.fontSize = "14px";
+        taskMenuModal.style.opacity = "0";
+        taskMenuModal.style.transition = "opacity 0.3s ease, transform 0.2s ease";
+        taskMenuModal.innerHTML = `
+            <ul class="task-menu">
+                <li class="selected">✔ 내가 정렬한 대로</li>
+                <li>날짜</li>
+                <li>최근 별표표시한 항목</li>
+                <hr>
+                <li>목록 이름 변경</li>
+                <li class="disabled">목록 삭제 <span>기본 목록은 삭제할 수 없음</span></li>
+                <hr>
+                <li>목록 인쇄</li>
+                <li>완료된 할 일 모두 삭제</li>
+                <li class="disabled">오래된 할 일 정리</li>
+            </ul>
+        `;
+        document.body.appendChild(taskMenuModal);
+    } else {
+        console.log("✅ taskMenuModal이 정상적으로 존재합니다.");
     }
 
-    // "저장" 버튼 활성화 (제목 입력 시)
-    taskTitleInput.addEventListener("input", function () {
-        if (this.value.trim() !== "") {
-            saveButton.classList.add("active");
-            saveButton.removeAttribute("disabled");
+    // ✅ 점 3개 클릭 시 메뉴 표시
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("dot-icon")) {
+            event.stopPropagation();
+
+            const dotMenu = event.target.closest(".dot-menu");
+            const rect = dotMenu.getBoundingClientRect();
+
+            taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
+            taskMenuModal.style.left = `${rect.left}px`;
+            taskMenuModal.style.display = "block";
+            taskMenuModal.style.opacity = "1";
+            taskMenuModal.style.transform = "scale(1)";
+
+            console.log("✅ 점 3개 클릭됨, 모달 위치 조정 완료");
         } else {
-            saveButton.classList.remove("active");
-            saveButton.setAttribute("disabled", "true");
+            // ✅ 외부 클릭 시 메뉴 닫기
+            if (!taskMenuModal.contains(event.target)) {
+                taskMenuModal.style.opacity = "0";
+                taskMenuModal.style.transform = "scale(0.95)";
+                setTimeout(() => {
+                    taskMenuModal.style.display = "none";
+                }, 200);
+            }
         }
     });
 
-    // 저장 버튼 클릭 시 할 일 추가
+    // ✅ 할 일 카드 추가 기능 (window 객체에 등록하여 전역에서 접근 가능)
     window.saveTask = function () {
-        const title = taskTitleInput.value.trim();
-        const date = taskDateInput.value || "날짜 없음";
-        const time = taskTimeInput.value || "시간 없음";
-        const description = taskDescriptionInput.value.trim() || "설명 없음";
+        const title = document.getElementById("taskTitle")?.value.trim();
+        const date = document.getElementById("taskDate")?.value || "날짜 없음";
+        const description = document.getElementById("taskDescription")?.value.trim() || "설명 없음";
 
-        if (title === "") {
+        if (!title) {
             alert("제목을 입력하세요!");
             return;
         }
 
-        // 새로운 할 일 카드 생성
-        const taskCard = document.createElement("div");
-        taskCard.classList.add("task-card");
+        if (!taskBoard) {
+            console.error("❌ taskBoard 요소가 없습니다.");
+            return;
+        }
 
-        taskCard.innerHTML = `
+        // ✅ 새로운 할 일 카드 생성
+        const newTask = document.createElement("div");
+        newTask.classList.add("task-card");
+        newTask.innerHTML = `
             <h3>${title}</h3>
             <div class="dot-menu">
-                <img src="/images/free-icon-three-dot-menu-17399989.png" alt="점 3개 아이콘" class="dot-icon">
+                <img src="/images/free-icon-three-dot-menu-17399989.png" class="dot-icon">
             </div>
-            <a href="#" class="add-task">➕ 할 일 추가</a>
-            <p>📌 알림 <span class="alert">${date} ${time}</span></p>
+            <p>📌 알림: ${date}</p>
             <p class="description">${description}</p>
         `;
 
-        // 할 일 목록에 추가
-        taskBoard.appendChild(taskCard);
+        // ✅ 생성된 카드 `taskBoard`에 추가
+        taskBoard.appendChild(newTask);
+        newTask.style.display = "block";
 
-        // 모달 닫기 및 입력 필드 초기화
-        closeModal();
+        console.log("✅ 새로운 카드 생성 완료:", newTask);
+
+        // ✅ 추가된 카드의 점 3개 이벤트 핸들러
+        newTask.querySelector(".dot-icon").addEventListener("click", function (event) {
+            event.stopPropagation();
+            const rect = this.getBoundingClientRect();
+            taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
+            taskMenuModal.style.left = `${rect.left}px`;
+            taskMenuModal.style.display = "block";
+            taskMenuModal.style.opacity = "1";
+            taskMenuModal.style.transform = "scale(1)";
+            console.log("✅ 점 3개 클릭됨, 모달 위치 조정 완료 (동적 추가)");
+        });
+
+        document.getElementById("taskModal").style.display = "none";
     };
 
-    // 모달 외부 클릭 시 닫기
-    window.onclick = function (event) {
-        if (event.target === taskModal) {
-            closeModal();
-        }
-    };
+    console.log("✅ saveTask 함수가 window 객체에 등록됨:", window.saveTask);
 });
