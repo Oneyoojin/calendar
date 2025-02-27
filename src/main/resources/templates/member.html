@@ -6,9 +6,10 @@
     <title>Calendar Tasks</title>
     <link rel="stylesheet" th:href="@{/css/member.css}">
     <link rel="stylesheet" th:href="@{/css/task-modal.css}">
+    <link rel="stylesheet" th:href="@{/css/title-modal.css}">
     <link rel="stylesheet" th:href="@{/css/index.css}">
-    <script th:src="@{/js/index.js}" defer></script>
     <script th:src="@{/js/task-modal.js}" defer></script>
+    <script th:src="@{/js/title-modal.js}" defer></script>
     <script th:src="@{/js/member.js}" defer></script>
 </head>
 <body>
@@ -26,6 +27,7 @@
         <img th:src="@{/images/free-icon-menu-1237932.png}" style="width: 20px; height: auto;">
     </div>
 
+    <!-- ✅ 사이드바 -->
     <div class="sidebar">
         <h2>
             <img th:src="@{/images/icon.png}" alt="Calendar Icon" class="logo" style="width: 220px; height: auto;"> 
@@ -36,7 +38,8 @@
                 <li class="active">✔ 모든 할 일</li>
                 <li> ⭐ 별표 표시됨</li>
                 <li id="today-tasks"> 오늘의 할 일</li>
-                <li> ➕ 새 목록 만들기</li>
+                <!-- ✅ "새 목록 만들기" 클릭 시 제목 추가 모달 열기 -->
+                <li onclick="openTitleModal()"> ➕ 새 목록 만들기</li>
             </ul>
         </div>
     </div>
@@ -63,12 +66,23 @@
         </ul>
     </div>
 
-    <!-- 모달 창 -->
+    <!-- ✅ 새 목록 만들기 모달 -->
+    <div id="titleModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>새 목록 제목 추가</h3>
+            <input type="text" id="listTitle" placeholder="목록 제목 입력">
+            <div class="modal-buttons">
+                <button onclick="closeTitleModal()">취소</button>
+                <button id="confirmTitleButton" onclick="createList()" disabled>완료</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ 기존 할 일 추가 모달 -->
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <input type="text" id="taskTitle" placeholder="제목 추가" class="title-input">
-
             <div class="date-time">
                 <button class="icon-btn">
                     <i class="fa-solid fa-hourglass-start"></i>
@@ -76,89 +90,63 @@
                 <input type="date" id="taskDate">
                 <input type="time" id="taskTime">
             </div>
-
             <div class="checkbox-group">
                 <input type="checkbox" id="allDay">
                 <label for="allDay">종일</label>
             </div>
-
             <select id="repeatSelect">
                 <option>반복 안함</option>
                 <option>매일</option>
                 <option>매주</option>
                 <option>매월</option>
             </select>
-
             <textarea id="taskDescription" placeholder="설명 추가"></textarea>
-
             <select id="taskList">
                 <option>내 할 일 목록1</option>
                 <option>내 할 일 목록2</option>
             </select>
-
             <button class="save-btn" onclick="saveTask()">저장</button>
         </div>
     </div>
 
+    <!-- ✅ JavaScript 추가 -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const taskBoard = document.getElementById("taskBoard");
-            const taskMenuModal = document.getElementById("taskMenuModal");
+            const titleModal = document.getElementById("titleModal");
+            const listTitleInput = document.getElementById("listTitle");
+            const confirmTitleButton = document.getElementById("confirmTitleButton");
 
-            // ✅ 점 3개 클릭 시 메뉴 표시
-            document.addEventListener("click", function (event) {
-                if (event.target.classList.contains("dot-icon")) {
-                    event.stopPropagation();
+            // ✅ "새 목록 만들기" 클릭 시 모달 열기
+            window.openTitleModal = function () {
+                titleModal.style.display = "block";
+            };
 
-                    const dotMenu = event.target.closest(".dot-menu");
-                    const rect = dotMenu.getBoundingClientRect();
+            // ✅ "취소" 클릭 시 모달 닫기
+            window.closeTitleModal = function () {
+                titleModal.style.display = "none";
+                listTitleInput.value = "";
+                confirmTitleButton.disabled = true;
+            };
 
-                    taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
-                    taskMenuModal.style.left = `${rect.left}px`;
-                    taskMenuModal.style.display = "block";
-                } else {
-                    if (!taskMenuModal.contains(event.target)) {
-                        taskMenuModal.style.display = "none";
-                    }
-                }
+            // ✅ 입력 감지 후 "완료" 버튼 활성화
+            listTitleInput.addEventListener("input", function () {
+                confirmTitleButton.disabled = listTitleInput.value.trim() === "";
             });
 
-            // ✅ 카드 추가 기능 (이미지 포함)
-            window.saveTask = function () {
-                const title = document.getElementById("taskTitle").value.trim();
-                if (!title) {
-                    alert("제목을 입력하세요!");
-                    return;
-                }
+            // ✅ "완료" 클릭 시 새 목록 추가
+            window.createList = function () {
+                const listTitle = listTitleInput.value.trim();
+                if (listTitle === "") return;
 
-                const newTask = document.createElement("div");
-                newTask.classList.add("task-card");
-                newTask.innerHTML = `
-                    <h3>${title}</h3>
-                    <div class="dot-menu">
-                        <img src="/images/free-icon-three-dot-menu-17399989.png" class="dot-icon">
-                    </div>
-                    <p>📌 알림: ${document.getElementById("taskDate").value}</p>
-                    <p class="description">${document.getElementById("taskDescription").value}</p>
-                    <img src="/images/Pngtree-up-down-arrow-number_4706662.png" 
-                         alt="Up Down Arrows" 
-                         class="up-down-icon"
-                         style="width: 20px; height: auto;">
-                `;
+                console.log("✅ 새 목록 추가됨:", listTitle);
 
-                taskBoard.appendChild(newTask);
-                newTask.style.display = "block";
+                // 🔹 사이드바 리스트에 추가
+                const taskLists = document.querySelector(".task-lists");
+                const newListItem = document.createElement("li");
+                newListItem.textContent = listTitle;
+                taskLists.appendChild(newListItem);
 
-                // ✅ 추가된 카드의 점 3개 이벤트 핸들러
-                newTask.querySelector(".dot-icon").addEventListener("click", function (event) {
-                    event.stopPropagation();
-                    const rect = this.getBoundingClientRect();
-                    taskMenuModal.style.top = `${rect.bottom + window.scrollY}px`;
-                    taskMenuModal.style.left = `${rect.left}px`;
-                    taskMenuModal.style.display = "block";
-                });
-
-                document.getElementById("taskModal").style.display = "none";
+                closeTitleModal();
             };
         });
     </script>

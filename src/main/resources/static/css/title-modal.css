@@ -1,0 +1,91 @@
+/* ✅ 새 목록 만들기 모달 스타일 */
+.title-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.title-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.title-modal h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+#listTitle {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-bottom: 2px solid #007AFF;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#listTitle:focus {
+    border-bottom: 2px solid #0056b3;
+}
+
+.title-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.title-modal-buttons button {
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: #007AFF;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.title-modal-buttons button:disabled {
+    color: #ccc;
+    cursor: default;
+}
+
+/* ✅ 새 목록 카드 스타일 */
+.title-task-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+    text-align: center;
+    width: 200px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.title-task-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.title-task-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.title-task-card:hover {
+    transform: scale(1.05);
+}
