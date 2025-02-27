@@ -30,13 +30,13 @@
             <img th:src="@{/images/icon.png}" alt="Calendar Icon" class="logo" style="width: 220px; height: auto;">
         </h2>
         <div class="sidebar-content">
-            <!-- ✅ "만들기" 버튼 -->
+            <!-- ✅ 기존 만들기 기능 유지 -->
             <button class="create-btn" onclick="openModal()">+ 만들기</button>
             <ul class="task-lists">
                 <li class="active">✔ 모든 할 일</li>
                 <li> ⭐ 별표 표시됨</li>
                 <li id="today-tasks"> 오늘의 할 일</li>
-                <!-- ✅ "새 목록 만들기" 버튼 -->
+                <!-- ✅ "새 목록 만들기" 추가 -->
                 <li onclick="openTitleModal()"> ➕ 새 목록 만들기</li>
             </ul>
         </div>
@@ -46,18 +46,34 @@
         <div id="taskBoard" class="task-board"></div>
     </div>
 
-    <!-- ✅ "만들기" 모달 -->
+    <!-- ✅ 기존 "만들기" 모달 (할 일 추가) -->
     <div id="taskModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h3>새 할 일 만들기</h3>
             <input type="text" id="taskTitle" placeholder="제목 추가" class="title-input">
             <div class="date-time">
+                <button class="icon-btn">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                </button>
                 <input type="date" id="taskDate">
                 <input type="time" id="taskTime">
             </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="allDay">
+                <label for="allDay">종일</label>
+            </div>
+            <select id="repeatSelect">
+                <option>반복 안함</option>
+                <option>매일</option>
+                <option>매주</option>
+                <option>매월</option>
+            </select>
             <textarea id="taskDescription" placeholder="설명 추가"></textarea>
-            <button id="confirmTaskButton" class="save-btn" onclick="saveTask()">저장</button>
+            <select id="taskList">
+                <option>내 할 일 목록1</option>
+                <option>내 할 일 목록2</option>
+            </select>
+            <button class="save-btn" onclick="saveTask()">저장</button>
         </div>
     </div>
 
@@ -76,15 +92,15 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const taskModal = document.getElementById("taskModal");
-            const titleModal = document.getElementById("titleModal");
-
             const taskTitleInput = document.getElementById("taskTitle");
-            const confirmTaskButton = document.getElementById("confirmTaskButton");
 
+            const titleModal = document.getElementById("titleModal");
             const listTitleInput = document.getElementById("listTitle");
             const confirmTitleButton = document.getElementById("confirmTitleButton");
 
-            /* ✅ "만들기" 모달 기능 */
+            const taskBoard = document.getElementById("taskBoard");
+
+            /* ✅ 기존 "만들기" 기능 */
             window.openModal = function () {
                 taskModal.style.display = "flex";
             };
@@ -92,10 +108,27 @@
             window.closeModal = function () {
                 taskModal.style.display = "none";
                 taskTitleInput.value = "";
-                confirmTaskButton.disabled = true;
             };
 
-            /* ✅ "새 목록 만들기" 모달 기능 */
+            window.saveTask = function () {
+                const taskTitle = taskTitleInput.value.trim();
+                if (!taskTitle) {
+                    alert("제목을 입력하세요!");
+                    return;
+                }
+
+                const newTask = document.createElement("div");
+                newTask.classList.add("task-card");
+                newTask.innerHTML = `
+                    <h3>${taskTitle}</h3>
+                    <p class="description">할 일이 추가되었습니다.</p>
+                `;
+
+                taskBoard.appendChild(newTask);
+                closeModal();
+            };
+
+            /* ✅ "새 목록 만들기" 기능 */
             window.openTitleModal = function () {
                 titleModal.style.display = "flex";
             };
@@ -106,16 +139,10 @@
                 confirmTitleButton.disabled = true;
             };
 
-            /* ✅ 입력 감지 후 버튼 활성화 */
-            taskTitleInput.addEventListener("input", function () {
-                confirmTaskButton.disabled = taskTitleInput.value.trim() === "";
-            });
-
             listTitleInput.addEventListener("input", function () {
                 confirmTitleButton.disabled = listTitleInput.value.trim() === "";
             });
 
-            /* ✅ "완료" 클릭 시 새 목록 추가 */
             window.createList = function () {
                 const listTitle = listTitleInput.value.trim();
                 if (listTitle === "") return;
@@ -127,6 +154,14 @@
                 newListItem.textContent = listTitle;
                 taskLists.appendChild(newListItem);
 
+                const newCard = document.createElement("div");
+                newCard.classList.add("task-card");
+                newCard.innerHTML = `
+                    <h3>${listTitle}</h3>
+                    <p class="description">새 목록이 추가되었습니다.</p>
+                `;
+
+                taskBoard.appendChild(newCard);
                 closeTitleModal();
             };
         });
