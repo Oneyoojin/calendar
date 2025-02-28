@@ -1,54 +1,46 @@
 package com.example.calendar.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
-@Table(name = "memos")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Table(name = "memos", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_schedule_id", columnList = "schedule_id")
+})
 public class Memos {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memoId;
+    @Column(name = "memo_id")
+    private Long memoId; // 메모 고유 ID
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private Users user; // 유저 ID (참조 관계)
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", nullable = false)
-    private Schedules schedule;
+    private Schedule schedule; // 일정 ID (참조 관계)
 
-    @Column(columnDefinition = "TEXT")
-    private String memo;
+    @Column(name = "memo", columnDefinition = "TEXT")
+    private String memo; // 메모 내용
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Emotion emotion;
+    @Column(name = "emotion", nullable = false)
+    private Emotion emotion; // 감정 상태
 
-    @Column(unique = true, length = 36)
-    private String shareLink;
+    @Column(name = "share_link", unique = true, length = 36)
+    private String shareLink; // 공유 링크
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now(); // 메모 생성 시간
 
     public enum Emotion {
         슬픔, 기쁨, 보통
