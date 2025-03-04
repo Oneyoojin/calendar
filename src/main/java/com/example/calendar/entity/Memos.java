@@ -34,7 +34,7 @@ public class Memos {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "emotion", nullable = false)
-    private Emotion emotion; // 감정 상태
+    private Emotion emotion = Emotion.NEUTRAL; // 감정 상태 (기본값 설정)
 
     @Column(name = "share_link", unique = true, length = 36)
     private String shareLink; // 공유 링크
@@ -42,7 +42,26 @@ public class Memos {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now(); // 메모 생성 시간
 
+    // ✅ 감정 상태 Enum
     public enum Emotion {
-        슬픔, 기쁨, 보통
+        HAPPY("기쁨"),
+        SAD("슬픔"),
+        NEUTRAL("보통"); // 기본값
+
+        private final String koreanName;
+
+        Emotion(String koreanName) {
+            this.koreanName = koreanName;
+        }
+
+        // ✅ 한글 → Enum 변환 메서드
+        public static Emotion fromKoreanName(String koreanName) {
+            for (Emotion emotion : Emotion.values()) {
+                if (emotion.koreanName.equals(koreanName)) {
+                    return emotion;
+                }
+            }
+            return NEUTRAL; // 기본값 설정
+        }
     }
 }
